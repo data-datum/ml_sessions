@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Representation Learning on Graphs</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Roxana Noelia Villafañe" />
+    <meta name="author" content="" />
+    <meta name="date" content="2020-07-17" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Representation Learning on Graphs
+## Machine Learning Sessions
+### Roxana Noelia Villafañe
+### 
+### 2020-07-17
+
+---
+
+
+
+
+
+
+
+
+
+# Abstract
+
+1. ML on graphs con aplicaciones desde redes sociales al diseño de fármacos. 
+2. *Desafío primario: encontrar una manera de representar, o codificar, la estructura de un grafo para que la información sea aprovechada (exploited) en un modelo de ML.*
+3. En general, el aprendizaje automático 
+
+
+---
+
+# 1. Introduction
+
+* Many machine learning applications seek to make predictions or discover new patterns using graph-structured data as feature information.
+* The central problem in machine learning on graphs is finding a way to incorporate information about graph-structure into a machine learning model. 
+* The challenge— from a machine learning perspective—is that there is no straightforward way to encode this high-dimensional, non-Euclidean information about graph structure into a feature vector.
+* More recently, there has been a surge of approaches that seek to learn representations that encode structural information about the graph. The idea behind these representation learning approaches is to learn a mapping that embeds nodes, or entire (sub)graphs, as points in a low-dimensional vector space Rd. The goal is to optimize this mapping so that geometric relationships in the embedding space reflect the structure of the original graph.
+
+---
+
+* Previous work treated this problem as a pre-processing step, using hand-engineered statistics to extract structural information. In contrast, **representation learning approaches treat this problem as machine learning task itself, using a data-driven approach to learn embeddings that encode graph structure.**
+
+* Our survey attempts to **merge together multiple**, disparate lines of research that have drawn significant attention across different subfields and venues in recent years—e.g., *node embedding methods*, which are a popular object of study in the data mining community, and *graph convolutional networks*, which have drawn considerable attention in major machine learning venues. In doing so, **we develop a unified conceptual framework for describing the various approaches and emphasize major conceptual distinctions.**
+
+---
+
+# Assumptions
+
+
+
+---
+
+# Embedding nodes
+
+#### The goal is to encode nodes as low-dimensional vectors that summarize their graph position and the structure of their local graph neighborhood.
+#### These low- dimensional embeddings can be viewed as encoding, or projecting, nodes into a latent space, where geometric relations in this latent space correspond to interactions (e.g., edges) in the original graph.
+
+&lt;img src="img/karate-club.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Overview of approaches: encoder-decoder perspective
+
+* In this framework, we organize the various methods around two key mapping functions: **an encoder**, which maps each node to a low-dimensional vector, or embedding, and **a decoder**, which decodes structural information about the graph from the learned embeddings.
+
+#### The intuition behind the encoder-decoder idea is the following: if we can learn to decode high-dimensional graph information—such as the global positions of nodes in the graph or the structure of local graph neighborhoods—from encoded low-dimensional embeddings, then, in principle, these embeddings should contain all information necessary for downstream machine learning tasks.
+
+---
+&lt;img src="img/encode-decode.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+**Once we have optimized the encoder-decoder system, we can use the trained encoder to generate embeddings for nodes, which can then be used as a feature inputs for downstream machine learning tasks.** For example, one could feed the learned embeddings to a logistic regression classifier to predict the community that a node belongs to [47], or one could use distances between the embeddings to recommend friendship links in a social network
+
+---
+
+### Methodological components
+
+1. A pairwise similarity function sG : V ×V → R+, defined over the graph G. This function measures the similarity between nodes in G.
+2. An encoder function, ENC, that generates the node embeddings. This function contains a number of trainable parameters that are optimized during the training phase.
+3. A decoder function, DEC, which reconstructs pairwise similarity values from the generated embeddings. This function usually contains no trainable parameters.
+4. A loss function, ?, which determines how the quality of the pairwise reconstructions is evaluated in order to train the model, i.e., how DEC(zi, zj) is compared to the true sG(vi, vj) values.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
