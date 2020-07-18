@@ -32,6 +32,9 @@ style_duo_accent(
 xaringanExtra::use_tile_view()
 ```
 
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
 
 # Abstract
 
@@ -95,4 +98,7 @@ knitr::include_graphics("img/encode-decode.png")
 2. An encoder function, ENC, that generates the node embeddings. This function contains a number of trainable parameters that are optimized during the training phase.
 3. A decoder function, DEC, which reconstructs pairwise similarity values from the generated embeddings. This function usually contains no trainable parameters.
 4. A loss function, ?, which determines how the quality of the pairwise reconstructions is evaluated in order to train the model, i.e., how DEC(zi, zj) is compared to the true sG(vi, vj) values.
+
+---
+
 
