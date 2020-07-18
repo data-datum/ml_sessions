@@ -101,4 +101,65 @@ knitr::include_graphics("img/encode-decode.png")
 
 ---
 
+## Shallow-embedding approach
 
+The majority of node embedding algorithms rely on what we call shallow embedding. For these shallow em- bedding approaches, the encoder function—which maps nodes to vector embeddings—is simply an “embedding lookup”:
+$ENC(vi) = Zvi$
+where $Z$ ∈ $Rd×|V|$ is a matrix containing the embedding vectors for all nodes and $vi$ ∈ IV is a one-hot indicator vector indicating the column of $Z$ corresponding to node $vi$. 
+
+
+---
+
+## Shallow embedding approaches
+
+* **Factorization-based approaches**
+
+1.  Laplacian eigenmaps
+2.  Inner-product methods
+
+--
+* **Random walk approaches**
+
+1. DeepWalk and node2vec
+2. Large-scale information network embeddings (LINE)
+
+
+---
+
+### Major drawbacks of shallow embedding approaches
+
+1. **No parameters are shared between nodes in the encoder** (i.e., the encoder is simply an embedding lookup based on arbitrary node ids). This can be statistically inefficient, since parameter sharing can act as a powerful *form of regularization*, and it is also computationally inefficient, since it means that the number of parameters in shallow embedding methods necessarily grows as $O(|V|)$.
+2. **Shallow embedding also fails to leverage node attributes during encoding**. In many large graphs nodes have attribute information (e.g., user profiles on a social network) that is often highly informative with respect to the node’s position and role in the graph.
+3. **Shallow embedding methods are inherently transductive**, i.e., they can only generate embeddings for nodes that were present during the training phase, and they cannot generate embeddings for previously unseen nodes unless additional rounds of optimization are performed to optimize the embeddings for these nodes. This is highly problematic for evolving graphs, massive graphs that cannot be fully stored in memory, or domains that require generalizing to new graphs after training.
+
+---
+
+## Generalized encoder-decoder architectures
+
+* **Neighborhood autoencoder methods**
+
+1. Deep Neural Graph Representations (DNGR)
+2. Structural Deep Network embeddings (SDNE)
+
+--
+
+* **Neighborhood aggregation & convolutional encoders**
+
+---
+
+## Neighborhood autoencoder methods
+
+The basic idea behind these approaches is that they use autoencoders—a well known approach for deep learning in order to compress information about a node’s local neighborhood. DNGR and SDNE also differ from the previously reviewed approaches in that they use a *unary decoder* instead of a pairwise one.
+
+--
+
+```{r echo=FALSE, out.width = '100%', fig.align='center'}
+knitr::include_graphics("img/fig6.png")
+```
+
+
+---
+
+
+  
+  
