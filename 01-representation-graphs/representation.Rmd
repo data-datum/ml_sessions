@@ -153,13 +153,52 @@ The basic idea behind these approaches is that they use autoencoders—a well kn
 
 --
 
-```{r echo=FALSE, out.width = '100%', fig.align='center'}
+```{r fig6, echo=FALSE, out.width = '100%', fig.align='center'}
 knitr::include_graphics("img/fig6.png")
 ```
 
 
 ---
 
+## Neighborhood aggregation & convolutional encoders
 
+A number of recent node embedding approaches aim to solve the main limitations of the shallow embedding and autoencoder methods by designing encoders that **rely on a node’s local neighborhood, but not necessarily the entire graph**. The intuition behind these approaches is that they generate embeddings for a node by aggregating information from its local neighborhood
   
-  
+```{r fig7, echo=FALSE, out.width = '100%', fig.align='center'}
+knitr::include_graphics("img/fig7.png")
+```
+
+
+---
+
+#### Neighborhood aggregation & convolutional encoders
+
+* Unlike the previously discussed methods, these neighborhood aggregation algorithms rely on node features or attributes (denoted xi ∈ Rm) to generate embeddings. 
+
+* For example, a social network might have text data (e.g., profile information), or a protein-protein interaction network might have molecular markers associated with each node. The neighborhood aggregation methods leverage this attribute information to inform their embeddings.
+These methods are often called **convolutional because they represent a node as a function of its surrounding neighborhood, in a manner similar to the receptive field of a center-surround convolutional kernel in computer vision** 
+
+---
+
+### Algorithm (1)
+
+In the encoding phase, the neighborhood aggregation methods build up the representation for a node in an iterative, or recursive, fashion. 
+
+* First, the node embeddings are initialized to be equal to the input node attributes. 
+* Then at each iteration of the encoder algorithm, nodes aggregate the embeddings of their neighbors, using an aggregation function that operates over sets of vectors.
+* After this aggregation, every node is assigned a new embedding, equal to its aggregated neighborhood vector combined with its previous embedding from the last iteration. 
+* Finally, this combined embedding is fed through a dense neural network layer and the process repeats. As the process iterates, the node embeddings contain information aggregated from further and further reaches of the graph.
+
+As the process iterates, the node embeddings contain information aggregated from further and further reaches of the graph.
+
+---
+
+However, the dimensionality of the embeddings remains constrained as the process iterates, so the encoder is forced to compress all the neighborhood information into a low dimensional vector. After K iterations the process terminates and the final embedding vectors are output as the node representations.
+
+**Graph Convolutional Networks (GCN), column networks, and the GraphSAGE algorithm follow the basic procedure outlined en 1.**
+
+
+---
+
+
+
