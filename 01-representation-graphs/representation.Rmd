@@ -38,10 +38,11 @@ xaringanExtra::use_panelset()
 
 # Abstract
 
-1. ML on graphs con aplicaciones desde redes sociales al diseño de fármacos. 
-2. *Desafío primario: encontrar una manera de representar, o codificar, la estructura de un grafo para que la información sea aprovechada (exploited) en un modelo de ML.*
-3. En general, el aprendizaje automático 
+1. Machine learning on graphs is an important and ubiquitous task with applications ranging from drug design to friendship recommendation in social networks. 
+2. The primary challenge in this domain is finding a way to represent, or encode, graph structure so that it can be easily exploited by machine learning models.
+3. Traditionally, machine learning approaches relied on user-defined heuristics to extract features encoding structural information about a graph (e.g., degree statistics or kernel functions). However, recent years have seen a surge in approaches that automatically learn to encode graph structure into low-dimensional embeddings, using techniques based on deep learning and nonlinear dimensionality reduction. 
 
+**We provide a conceptual review of key advancements in this area of representation learning on graphs. We review methods to embed individual nodes as well as approaches to embed entire (sub)graphs. In doing so, we develop a unified framework to describe these recent approaches, and we highlight a number of important applications and directions for future work.**
 
 ---
 
