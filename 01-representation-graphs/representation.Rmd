@@ -1,10 +1,4 @@
 ---
-title: "Representation Learning on Graphs"
-subtitle: "Machine Learning Sessions"  
-author: 
-  - "Roxana Noelia Villafañe"
-  - ""
-date: '`r Sys.Date()`'
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -36,6 +30,18 @@ xaringanExtra::use_tile_view()
 xaringanExtra::use_panelset()
 ```
 
+background-image: url(img/diapo1.jpg)
+background-size: cover
+class: inverse,  middle
+
+
+## Representation Learning on Graphs
+### Machine Learning Sessions 
+#### Roxana Noelia Villafañe
+
+fecha: `r Sys.Date()`
+
+---
 # Abstract
 
 1. Machine learning on graphs is an important and ubiquitous task with applications ranging from drug design to friendship recommendation in social networks. 
