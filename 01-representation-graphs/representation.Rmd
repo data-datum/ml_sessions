@@ -198,7 +198,12 @@ However, the dimensionality of the embeddings remains constrained as the process
 **Graph Convolutional Networks (GCN), column networks, and the GraphSAGE algorithm follow the basic procedure outlined en 1.**
 
 
+```{r pseudocode, echo=FALSE, out.width = '100%', fig.align='center'}
+knitr::include_graphics("img/pseudocode.png")
+```
+
+
 ---
 
-
+  
 
