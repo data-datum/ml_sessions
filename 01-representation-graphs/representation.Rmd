@@ -76,7 +76,7 @@ Traditionally, machine learning approaches relied on user-defined heuristics to 
 * Many machine learning applications seek to make predictions or discover new patterns using graph-structured data as feature information.
 * The central problem in machine learning on graphs is finding a way to incorporate information about graph-structure into a machine learning model. 
 * The challenge— from a machine learning perspective—is that there is no straightforward way to encode this high-dimensional, non-Euclidean information about graph structure into a feature vector.
-* More recently, there has been a surge of approaches that seek to learn representations that encode structural information about the graph. The idea behind these representation learning approaches is to learn a mapping that embeds nodes, or entire (sub)graphs, as points in a low-dimensional vector space Rd. The goal is to optimize this mapping so that geometric relationships in the embedding space reflect the structure of the original graph.
+* More recently, there has been a surge of approaches that seek to learn representations that encode structural information about the graph. **The idea behind these representation learning approaches is to learn a mapping that embeds nodes, or entire (sub)graphs, as points in a low-dimensional vector space. The goal is to optimize this mapping so that geometric relationships in the embedding space reflect the structure of the original graph.**
 
 ---
 
@@ -220,7 +220,7 @@ As the process iterates, the node embeddings contain information aggregated from
 ---
 
 However, the dimensionality of the embeddings remains constrained as the process iterates, so the encoder is forced to compress all the neighborhood information into a low dimensional vector. After K iterations the process terminates and the final embedding vectors are output as the node representations.
-
+              
 **Graph Convolutional Networks (GCN), column networks, and the GraphSAGE algorithm follow the basic procedure outlined en 1.**
 
 
@@ -232,4 +232,4 @@ knitr::include_graphics("img/pseudocode.png")
 ---
 
   
-
+  
