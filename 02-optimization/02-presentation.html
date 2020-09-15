@@ -368,7 +368,126 @@ nodes per layer) in a given number of training epochs (passes through the traini
 * At extremes, a learning rate that is too large will result in weight updates that will be too large and the performance of the model (such as its loss on the training dataset) will oscillate over training epochs.
 
 
+---
 
+## How to configure a learning rate
+
+* The learning rate will interact with many other aspects of the optimization process, and the interactions may be nonlinear. Nevertheless, in general, smaller learning rates will require more training epochs. Conversely, larger learning rates will require fewer training epochs. Further, smaller batch sizes are better suited to smaller learning rates given the noisy estimate of the error gradient. A traditional default value for the learning rate is 0.1 or 0.01, and this may represent a good starting point on your problem.
+
+
+* Unfortunately, we cannot analytically calculate the optimal learning rate for a given model on a given dataset. Instead, a good (or good enough) learning rate must be discovered via trial and error.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+The range of values to consider for the learning rate is less than 1.0 and greater than 10 −6.
+]
+
+
+
+---
+
+# Momentum
+
+* Training a neural network can be made easier with the addition of history to the weight update. Specifically, an exponentially weighted average of the prior updates to the weight can be included when the weights are updated. This change to stochastic gradient descent is called momentum and adds inertia to the update procedure, causing many past updates in one direction to continue in that direction in the future.
+
+* Momentum can accelerate learning on those problems where the high-dimensional weight
+space that is being navigated by the optimization process has structures that mislead the
+gradient descent algorithm, such as flat regions or steep curvature.
+
+* It has the effect of smoothing the optimization process, slowing updates to continue in the previous direction instead of getting stuck or oscillating.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+Momentum is set to a value greater than 0.0 and less than one, where common values such
+as 0.9 and 0.99 are used in practice.
+Common values of [momentum] used in practice include .5, .9, and .99.
+]
+
+
+
+---
+
+class: animated slideInRight fadeOutLeft,  inverse, middle
+
+background-image: url(img/diapo5.jpg)
+background-size: cover
+
+
+# Adaptive Learning Rates
+# (Optimizers)
+
+---
+
+# Adagrad 
+
+* Adagrad decreases the learning rate dynamically on a per-coordinate basis.
+
+* It uses the magnitude of the gradient as a means of adjusting how quickly progress is achieved - coordinates with large gradients are compensated with a smaller learning rate.
+
+* Computing the exact second derivative is typically infeasible in deep learning problems due to memory and computational constraints. The gradient can be a useful proxy.
+
+* If the optimization problem has a rather uneven uneven structure Adagrad can help mitigate the distortion.
+
+* Adagrad is particularly effective for sparse features where the learning rate needs to decrease more slowly for infrequently occurring terms.
+
+* On deep learning problems Adagrad can sometimes be too aggressive in reducing learning rates.
+
+* For implementations from scratch http://d2l.ai/chapter_optimization/adagrad.html 
+
+---
+
+# RMSProp
+
+* One of the key issues in Adagrad is that the learning rate decreases at a predefined schedule of effectively O(t−12)
+
+* While this is generally appropriate for convex problems, it might not be ideal for nonconvex ones, such as those encountered in deep learning. Yet, the coordinate-wise adaptivity of Adagrad is highly desirable as a preconditioner.
+
+* [Tieleman &amp; Hinton, 2012] proposed the RMSProp algorithm as a simple fix to decouple rate scheduling from coordinate-adaptive learning rates.
+
+* RMSProp is very similar to Adagrad insofar as both use the square of the gradient to scale coefficients.
+
+* RMSProp shares with momentum the leaky averaging. However, RMSProp uses the technique to adjust the coefficient-wise preconditioner.
+
+* The learning rate needs to be scheduled by the experimenter in practice.
+
+* For implementations from the scratch http://d2l.ai/chapter_optimization/rmsprop.html 
+
+---
+
+# Adadelta
+
+* Adadelta is yet another variant of AdaGrad (Section 11.7). The main difference lies in the fact that it decreases the amount by which the learning rate is adaptive to coordinates. Moreover, traditionally it referred to as not having a learning rate since it uses the amount of change itself as calibration for future change. The algorithm was proposed in [Zeiler, 2012].
+
+* Adadelta has no learning rate parameter. Instead, it uses the rate of change in the parameters itself to adapt the learning rate.
+
+* Adadelta requires two state variables to store the second moments of gradient and the change in parameters.
+
+* Adadelta uses leaky averages to keep a running estimate of the appropriate statistics.
+
+* For implementations from the scratch http://d2l.ai/chapter_optimization/adadelta.html 
+
+---
+
+# Adam
+
+* Adam [Kingma &amp; Ba, 2014] combines all these techniques into one efficient learning algorithm. As expected, this is an algorithm that has become rather popular as one of the more robust and effective optimization algorithms to use in deep learning. 
+
+* In particular, [Reddi et al., 2019] show that there are situations where Adam can diverge due to poor variance control. In a follow-up work [Zaheer et al., 2018] proposed a hotfix to Adam, called Yogi which addresses these issues. 
+
+* For implementations from the scratch http://d2l.ai/chapter_optimization/adam.html 
+
+---
+
+class: animated slideInRight fadeOutLeft, middle
+
+background-image: url(img/diapo7.jpg)
+background-size: cover
+
+
+# Batch Normalization
+
+
+
+---
 
 
 ---
