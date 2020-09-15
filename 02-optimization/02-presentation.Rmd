@@ -63,20 +63,30 @@ class: animated slideInRight fadeOutLeft
 
 # Introduction 
 
-* The goals of optimization and deep learning are fundamentally different. The former is primarily concerned with minimizing an objective whereas the latter is concerned with finding a suitable model.
-
-* Training error and generalization error generally differ: since the objective function of the optimization algorithm is usually a loss function based on the training dataset, the goal of optimization is to reduce the training error. However, the goal of statistical inference (and thus of deep learning) is to reduce the generalization error.
-
-
----
-class: animated slideInRight fadeOutLeft
-
-
 * A neural network model uses the examples to learn how to map specific sets of input variables to the output variable. It must do this in such a way that this mapping works well for the training dataset, but also works well on new examples not seen by the model during training. This ability to work well on specific examples and new examples is called the ability of the model to generalize.
 
 
 * A multilayer perceptron is just a mathematical function mapping some set of input
 values to output values.
+
+
+* Training error and generalization error generally differ: since the objective function of the optimization algorithm is usually a loss function based on the training dataset, the goal of optimization is to reduce the training error. However, the goal of statistical inference (and thus of deep learning) is to reduce the generalization error.
+
+
+
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+```{r echo=FALSE, out.width = '50%', fig.align='center'}
+knitr::include_graphics("img/error.png")
+```
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+The goals of optimization and deep learning are fundamentally different. The former is primarily concerned with minimizing an objective whereas the latter is concerned with finding a suitable model.
+]
 
 ---
 class: animated slideInRight fadeOutLeft
@@ -306,6 +316,7 @@ capable of navigating a larger set of mapping functions.
 
 
 ---
+
 
   
 
