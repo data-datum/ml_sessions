@@ -277,7 +277,8 @@ process is terminated.
 ---
 class: animated slideInRight fadeOutLeft, inverse,  middle
 
-
+background-image: url(img/diapo2.jpg)
+background-size: cover
 
 # Model Capacity 
 ---
@@ -314,8 +315,8 @@ capable of navigating a larger set of mapping functions.
 
 
 
-
 ---
+
 
 
   
