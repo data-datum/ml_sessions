@@ -53,7 +53,8 @@ fecha: `r Sys.Date()`
 
 * Generalities 
 * Model Capacity 
-* 
+* Batch size
+* Loss Function
 
 
 ---
@@ -267,6 +268,7 @@ process is terminated.
 class: animated slideInRight fadeOutLeft, inverse,  middle
 
 
+
 # Model Capacity 
 ---
 
@@ -302,8 +304,10 @@ capable of navigating a larger set of mapping functions.
 
 
 
+
 ---
 
+  
 
 
 ---
