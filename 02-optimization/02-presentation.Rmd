@@ -317,9 +317,94 @@ capable of navigating a larger set of mapping functions.
 
 ---
 
+class: animated slideInRight fadeOutLeft,  middle
+
+background-image: url(img/diapo3.jpg)
+background-size: cover
+
+# Batch size 
+
+---
+
+# Batch size
+
+* Neural networks are trained using the stochastic gradient descent optimization algorithm. This involves using the current state of the model to make a prediction, comparing the prediction to the actual values, and using the difference as an estimate of the error gradient. 
+
+* This error gradient is then used to update the model weights and the process is repeated. The error gradient is a statistical estimate. The more training examples used in the estimate, the more accurate this estimate will be and the more likely that the weights of the network will be adjusted in a way that will improve the performance of the model. 
+
+* The improved estimate of the error gradient comes at the computational cost of having to use the model to make many more predictions before the estimate can be calculated, and in turn, the weights updated.
+
+---
+
+# Batch size
+
+The number of training examples used in the estimate of the error gradient is a hyperparameter for the learning algorithm called the batch size, or simply the batch. 
+
+A batch size of 32 means that 32 samples from the training dataset will be used to estimate the error gradient before the model weights are updated.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+* **Batch Gradient Descent**. Batch size is set to the total number of examples in the
+training dataset.
+* **Stochastic Gradient Descent.** Batch size is set to one.
+* **Minibatch Gradient Descent.** Batch size is set to more than one and less than the
+total number of examples in the training dataset.
+
+]
 
 
-  
+
+---
+class: animated slideInRight fadeOutLeft,  inverse, middle
+
+background-image: url(img/diapo4.jpg)
+background-size: cover
+
+# Learning Rate
+
+---
+
+# Learning Rate
+
+The weights of a neural network cannot be calculated using an analytical method. 
+
+Instead, the weights must be discovered via an empirical optimization procedure called stochastic gradient descent. The optimization problem addressed by stochastic gradient descent for neural networks is challenging and the space of solutions (sets of weights) may be comprised of many good solutions (called global optima) as well as easy to find, but low in skill solutions (called local optima). 
+
+The amount of change to the model during each step of this search process, or the step size, is called the learning rate and provides perhaps the most important hyperparameter to tune for your neural network in order to achieve good performance on your problem.
+
+---
+
+### Efect of the learning rate
+
+* The learning rate hyperparameter controls the rate or speed at which the model learns. Specifically, it controls the amount of apportioned error that the weights of the model are updated with each time they are updated, such as at the end of each batch of training examples. Given a perfectly configured learning rate, the model will learn to best
+approximate the function given available resources (the number of layers and the number of
+nodes per layer) in a given number of training epochs (passes through the training data).
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+* Generally, **a large learning rate allows the model to learn faster**, at the cost of arriving on a sub-optimal final set of weights. A smaller learning rate may allow the model to learn a more optimal or even globally optimal set of weights but may take significantly longer to train.
+]
+
+* At extremes, a learning rate that is too large will result in weight updates that will be too large and the performance of the model (such as its loss on the training dataset) will oscillate over training epochs.
+
+
+---
+
+## How to configure a learning rate
+
+* The learning rate will interact with many other aspects of the optimization process, and the interactions may be nonlinear. Nevertheless, in general, smaller learning rates will require more training epochs. Conversely, larger learning rates will require fewer training epochs. Further, smaller batch sizes are better suited to smaller learning rates given the noisy estimate of the error gradient. A traditional default value for the learning rate is 0.1 or 0.01, and this may represent a good starting point on your problem.
+
+
+Unfortunately, we cannot analytically calculate the optimal learning rate for a given model
+on a given dataset. Instead, a good (or good enough) learning rate must be discovered via trial and error.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+The range of values to consider for the learning rate is less than 1.0 and greater than 10 −6.
+]
+
+
+
+---
+
+# Momentum
 
 
 ---
