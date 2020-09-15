@@ -504,11 +504,34 @@ background-size: cover
 # Batch Normalization
 
 
-
 ---
+
+# Batch Normalization 
+
+* Training deep neural networks with tens of layers is challenging as they can be sensitive to the initial random weights and configuration of the learning algorithm. One possible reason for this difficulty is the distribution of the inputs to layers deep in the network may change after each minibatch when the weights are updated. This can cause the learning algorithm to forever chase a moving target. This change in the distribution of inputs to layers in the network is referred to by the technical name internal covariate shift.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+Batch normalization is a technique for training very deep neural networks that standardizes the inputs to a layer for each minibatch. This has the effect of stabilizing the learning process and dramatically reducing the number of training epochs required to train deep networks. 
+]
+
+
+
 
 
 ---
 # Bibliography
+
+* A disciplined approach to neural network hyper-parameters: Part 1 -- learning rate, batch size, momentum, and weight decay https://arxiv.org/abs/1803.09820 
+
+* Optimization algorithms http://d2l.ai/chapter_optimization/index.html 
+
+* An overview of gradient descent optimization algorithms https://ruder.io/optimizing-gradient-descent/ 
+
+* Why Momentum Really Works https://distill.pub/2017/momentum/ 
+
+* Cyclical Learning Rates for Training Neural Networks https://arxiv.org/abs/1506.01186 
+
+
 
   
