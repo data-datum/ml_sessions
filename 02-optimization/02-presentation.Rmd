@@ -148,6 +148,15 @@ operate in this way as gradient optimization algorithms, as they naively follow 
 ---
 class: animated slideInRight fadeOutLeft
 
+## Gradient descent video
+
+* Video from RIIAA 2020
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/9bfCUXaj6cY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+class: animated slideInRight fadeOutLeft
+
 * Backpropagation refers to a technique from calculus to calculate the derivative of the model error for specific model parameters, allowing model weights to be updated to move down the gradient.
 
 ## Components of the learning algorithm 
