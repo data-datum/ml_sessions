@@ -157,8 +157,8 @@ Training a deep learning neural network model using stochastic gradient descent 
 * Network Topology.
 * Loss Function.
 * Weight Initialization.
-* Batch Size.
 * Learning Rate.
+* Batch Size.
 * Epochs.
 * Data Preparation.
 
@@ -317,7 +317,7 @@ knitr::include_graphics("img/depth.png")
 ```
 
 
-
+  
 ---
 
 class: animated slideInRight fadeOutLeft,  middle
@@ -416,13 +416,19 @@ gradient descent algorithm, such as flat regions or steep curvature.
 
 * It has the effect of smoothing the optimization process, slowing updates to continue in the previous direction instead of getting stuck or oscillating.
 
-
 .bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
 Momentum is set to a value greater than 0.0 and less than one, where common values such
 as 0.9 and 0.99 are used in practice.
 Common values of [momentum] used in practice include .5, .9, and .99.
 ]
 
+---
+
+## Momentum and Steepest Descent
+
+* Video from RIIAA 2020
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/hW8BhS9tkYY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ---
@@ -472,6 +478,8 @@ background-size: cover
 
 * For implementations from the scratch http://d2l.ai/chapter_optimization/rmsprop.html 
 
+* Andrew Ng's video [link](https://bit.ly/rmsprop)
+´
 ---
 
 # Adadelta
@@ -490,12 +498,13 @@ background-size: cover
 
 # Adam
 
-* Adam [Kingma & Ba, 2014] combines all these techniques into one efficient learning algorithm. As expected, this is an algorithm that has become rather popular as one of the more robust and effective optimization algorithms to use in deep learning. 
+* Adam [Kingma & Ba, 2014](https://arxiv.org/pdf/1412.6980.pdf) combines all these techniques into one efficient learning algorithm. As expected, this is an algorithm that has become rather popular as one of the more robust and effective optimization algorithms to use in deep learning. 
 
-* In particular, [Reddi et al., 2019] show that there are situations where Adam can diverge due to poor variance control. In a follow-up work [Zaheer et al., 2018] proposed a hotfix to Adam, called Yogi which addresses these issues. 
+* In particular, [Reddi et al., 2019](https://arxiv.org/abs/1904.09237) show that there are situations where Adam can diverge due to poor variance control. In a follow-up work [Zaheer et al., 2018](https://papers.nips.cc/paper/8186-adaptive-methods-for-nonconvex-optimization.pdf) proposed a hotfix to Adam, called **Yogi** which addresses these issues. 
 
 * For implementations from the scratch http://d2l.ai/chapter_optimization/adam.html 
 
+* Andrew Ng's video [link](https://bit.ly/adam-nn) 
 ---
 
 class: animated slideInRight fadeOutLeft, middle
@@ -519,7 +528,55 @@ Batch normalization is a technique for training very deep neural networks that s
 ]
 
 
+Video explanation [link](https://www.youtube.com/watch?v=DtEq44FTPM4) 
+---
 
+
+
+class: animated slideInRight fadeOutLeft, inverse,  middle
+
+background-image: url(img/diapo8.jpg)
+background-size: cover
+
+
+# Activation Functions
+
+
+---
+
+## Activation Functions
+
+A neural network is comprised of layers of nodes and learns to map examples of inputs to outputs. For a given node, the inputs are multiplied by the weights in a node and summed together. This value is referred to as the summed activation of the node. The summed activation is then transformed via an activation function and defines the specific output or activation of the node. The simplest activation function is referred to as the linear activation, where no transform is applied at all. A network comprised of only linear activation functions is very easy to train, but cannot learn complex mapping functions.
+
+Nonlinear activation functions are preferred as they allow the nodes to learn more complex
+structures in the data. Traditionally, two widely used nonlinear activation functions are the sigmoid and hyperbolic tangent activation functions.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+A general problem with both the sigmoid and tanh functions is that they saturate. **Once saturated, it becomes challenging for the learning algorithm to continue to adapt the weights to improve the performance of the model.**
+]
+
+
+---
+
+## Rectified Linear Units (RELU)
+
+The solution is to use the rectified linear activation function, or ReL for short. A node or unit that implements this activation function is referred to as a rectified linear activation unit, or ReLU for short. Often, networks that use the rectifier function for the hidden layers are referred to as rectified networks.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+g(z) = max{0, z}
+]
+
+Because rectified linear units are nearly linear, they preserve many of the properties
+that make linear models easy to optimize with gradient-based methods. They also
+preserve many of the properties that make linear models generalize well.<sup>1</sup> Because the rectified function is linear for half of the input domain and nonlinear for the
+other half, it is referred to as a piecewise linear function or a hinge function.
+
+
+.footnote[<sup>1</sup> Deep Learning, 2016. For other activation functions https://mlfromscratch.com/activation-functions-explained/#/]
+
+---
+
+  
 
 
 ---
@@ -532,6 +589,8 @@ Batch normalization is a technique for training very deep neural networks that s
 * An overview of gradient descent optimization algorithms https://ruder.io/optimizing-gradient-descent/ 
 
 * Why Momentum Really Works https://distill.pub/2017/momentum/ 
+
+* Andrew Ng's Momentum video [link](https://bit.ly/SGD-momentum)
 
 * Cyclical Learning Rates for Training Neural Networks https://arxiv.org/abs/1506.01186 
 
