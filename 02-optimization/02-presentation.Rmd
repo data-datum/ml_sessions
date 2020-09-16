@@ -312,6 +312,9 @@ The capacity of a neural network can be controlled by two aspects of the model:
 A model with more nodes or more layers has a greater capacity and, in turn, is potentially
 capable of navigating a larger set of mapping functions.
 
+```{r echo=FALSE, out.width = '100%', fig.align='center'}
+knitr::include_graphics("img/depth.png")
+```
 
 
 
