@@ -60,6 +60,183 @@ fecha: `r Sys.Date()`
 ---
 class: animated slideInRight fadeOutLeft
 
+## Challenge of Configuring Neural Networks
+
+**Configuring neural network models is often referred to as a dark art.**
+This is because there are no hard and fast rules for configuring a network for a given problem. We cannot analytically calculate the optimal model type or model configuration for a given dataset. Instead, there are decades worth of techniques, heuristics, tips, tricks, and other tacit knowledge spread across code, papers, blog posts, and in peoples’ heads. A shortcut to configuring a neural network on a problem is to copy the configuration of another network for a similar problem. But this strategy rarely leads to good results as model configurations are not transferable across problems. It is also likely that you work on predictive modeling problems that are unlike other problems
+described in the literature.
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Challenge of Configuring Neural Networks
+
+There are three types of problems that are straightforward to diagnose with regard to poor performance of a deep learning neural network model; they are:
+* **Problems with Learning.**
+Problems with learning manifest in a model that cannot effectively learn a training dataset or shows slow progress or bad performance when learning the training dataset.
+
+* **Problems with Generalization.** 
+Problems with generalization manifest in a model
+that overfits the training dataset and makes poor predictions on a holdout dataset.
+
+* **Problems with Predictions.**
+Problems with predictions manifest in the stochastic
+training algorithm having a strong influence on the final model, causing high variance in
+behavior and performance.
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Better Deep Learning
+
+There is some natural overlap and interaction between these areas of
+concern. For example, problems with learning affect the ability of the model to generalize as
+well as the variance in the predictions made from a final model. The sequential relationship
+between the three areas in the proposed framework allows the issue of deep learning model
+performance to be first isolated, then targeted with a specific technique or methodology. We
+can summarize techniques that assist with each of these problems as follows:
+
+* **Better Learning.** Techniques that improve or accelerate the adaptation of neural network
+model weights in response to a training dataset.
+
+* **Better Generalization.** Techniques that improve the performance of a neural network
+model on a holdout dataset.
+
+* **Better Predictions.** Techniques that reduce the variance in the performance of a final
+model.
+
+
+
+
+---
+
+class: animated slideInRight fadeOutLeft
+
+
+## Better Learning Techniques
+
+Better learning techniques are those changes to a neural network model or learning algorithm
+that improve or accelerate the adaptation of the model weights in response to a training dataset. In this part, are important the techniques used to improve the adaptation of the
+model weights. This begins with the careful configuration of the capacity of the model and the
+hyperparameters related to optimizing the neural network model using the stochastic gradient
+descent algorithm and updating the weights using the backpropagation of error algorithm; for
+example:
+* **Configure Capacity.** Including including the number of nodes in a layer and the number
+of layers used to define the scope of functions that can be learned by the model.
+* **Configure Batch Size.** Including exploring whether variations such as batch, stochastic
+(online), or minibatch gradient descent are more appropriate.
+* **Configure Loss Function.** Including understanding the way different loss functions
+must be interpreted and whether an alternate loss function would be appropriate for your
+problem.
+* **Configure Learning Rate.** Including understanding the effect of different learning rates
+on your problem and whether modern adaptive learning rate methods such as Adam would
+be appropriate
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+## Better Learning Techniques (2)
+
+This also includes simple data preparation and the automatic rescaling of inputs at deeper
+layers.
+
+* **Data Scaling Techniques.** Including the sensitivity that small network weights have to
+the scale of input variables and the impact of large errors in the target variable have on
+weight updates.
+
+* **Batch Normalization.** Including the sensitivity to changes in the distribution of inputs
+to layers deep in a network model and the benefits of standardizing layer inputs to add
+consistency of input and stability to the learning process.
+
+*Stochastic gradient descent* is a general optimization algorithm that can be applied to a wide
+range of problems. Nevertheless, the optimization process (or learning process) can become
+unstable and specific interventions are required; for example:
+* **Vanishing Gradients.** Prevent the training of deep multiple-layered networks causing
+layers close to the input layer to not have their weights updated; that can be addressed using
+modern activation functions such as the rectified linear activation function.
+* **Exploding Gradients.** Large weight updates cause a numerical overflow or underflow
+making the network weights take on a NaN or Inf value; that can be addressed using
+gradient scaling or gradient clipping.
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+## Better Learning Techniques (3)
+
+The lack of data on some predictive modeling problems can prevent effective learning.
+Specialized techniques can be used to jump-start the optimization process, providing a useful
+initial set of weights or even whole models that can be used for feature extraction; for example:
+
+* **Greedy Layer-Wise Pretraining.** Where layers are added one at a time to a model,
+learning to interpret the output of prior layers and permitting the development of much
+deeper models: a milestone technique in the field of deep learning.
+
+* **Transfer Learning.** Where a model is trained on a different, but somehow related,
+predictive modeling problem and then used to seed the weights or used wholesale as a
+feature extraction model to provide input to a model trained on the problem of interest.
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Better Generalization
+
+Better generalization techniques are those that change the neural network model or learning
+algorithm to reduce the effect of the model overfitting the training dataset and improve the
+performance of the model on a holdout validation or test dataset. Techniques that are designed to reduce generalization error are commonly referred to as regularization techniques. Almost universally, regularization is achieved by somehow reducing or limiting model complexity.
+Perhaps the most widely understood measure of model complexity is the size or magnitude
+of the model weights. A model with large weights is a sign that it may be overly specialized to
+the inputs in the training data, making it unstable when used when making a prediction on new
+unseen data. Keeping weights small via weight regularization is a powerful and widely used
+technique.
+
+* **Weight Regularization.** A change to the loss function that penalizes a model in
+proportion to the norm (magnitude) of the model weights, encouraging smaller weights
+and, in turn, a lower complexity model 
+
+* **Weight Constraint.** Update to the model to rescale the weights when the vector norm
+of the weights exceeds a threshold 
+
+* **Activity Regularization.** A change to the loss function that penalizes a model in
+proportion to the norm (magnitude) of the layer activations, encouraging smaller or more
+sparse internal representations.
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Better Generalization (2)
+
+Noise can be added to the model to encourage robustness with regard to the raw inputs or
+outputs from prior layers during training; for example:
+
+
+* **Dropout.** Probabilistically removing connections (weights) while training the network to
+break tight coupling between nodes across layers.
+
+* **Input Noise.** Addition of statistical variation or noise at the input layer or between
+hidden layers to reduce the model’s dependence on specific input values.
+Often, overfitting can occur due simply to training the model for too long on the training
+dataset. A simple solution is to stop the training early.
+
+* **Early Stopping.** Monitor model performance on the hold out validation dataset during
+training and stop the training process when performance on the validation set starts to
+degrade.
+
+
+---
+
+
+
+
+
+
+---
+class: animated slideInRight fadeOutLeft
+
 
 # Introduction 
 
@@ -601,6 +778,9 @@ other half, it is referred to as a piecewise linear function or a hinge function
 
 * Cyclical Learning Rates for Training Neural Networks https://arxiv.org/abs/1506.01186 
 
+* A Survey of Optimization Methods from a Machine Learning Perspective https://arxiv.org/abs/1906.06821 
 
+
+  
 
   
