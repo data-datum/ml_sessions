@@ -35,7 +35,7 @@ class: inverse,  middle
 ### Machine Learning Sessions 
 #### Roxana Noelia Villafañe
 
-fecha: 2020-10-01
+fecha: 2020-10-02
 
 ---
 # Outline
@@ -215,13 +215,6 @@ dataset. A simple solution is to stop the training early.
 * **Early Stopping.** Monitor model performance on the hold out validation dataset during
 training and stop the training process when performance on the validation set starts to
 degrade.
-
-
----
-
-
-
-
 
 
 ---
@@ -520,6 +513,92 @@ total number of examples in the training dataset.
 
 
 
+
+---
+class: animated slideInRight fadeOutLeft,  middle
+
+background-image: url(img/diapo9.jpg)
+background-size: cover
+
+
+## Loss Function
+
+
+
+    
+
+---
+
+
+## Loss Function
+
+* In the context of an optimization algorithm, the function used to evaluate a candidate solution
+(i.e. a set of weights) is referred to as the objective function. We may seek to *maximize or minimize the objective function*, meaning that we are searching for a candidate solution that has
+the highest or lowest score respectively. Typically, with neural networks, we seek to minimize
+the error. As such, the objective function is often referred to as a cost function or a loss function and the value calculated by the loss function is referred to as simply loss.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+The function we want to minimize or maximize is called the **objective function** or criterion. When we are minimizing it, we may also call it the **cost function**, **loss function**, or **error function**.
+]
+
+
+
+---
+
+## Maximum Likelihood estimate (MLE)
+
+
+* There are many functions that could be used to estimate the error of a set of weights in a neural
+network. We prefer a function where the space of candidate solutions maps onto a smooth
+(but high-dimensional) landscape that the optimization algorithm can reasonably navigate via
+iterative updates to the model weights. Maximum likelihood estimation, or MLE, is a framework
+for inference for finding the best statistical estimates of parameters from historical training data: exactly what we are trying to do with the neural network.
+
+* A benefit of using maximum likelihood as a framework for estimating the model parameters
+(weights) for neural networks and in machine learning in general is that as the number of
+examples in the training dataset is increased, the estimate of the model parameters improves.
+This is called the property of consistency.
+
+
+---
+
+## Maximum Likelihood and Cross-Entropy
+
+* Under the **maximum likelihood framework**, the error between two probability distributions is
+measured using **cross-entropy**. When modeling a classification problem where we are interested in
+mapping input variables to a class label, we can model the problem as predicting the probability
+of an example belonging to each class. In a binary classification problem, there would be two
+classes, so we may predict the probability of the example belonging to the first class. In the
+case of multiple-class classification, we can predict a probability for the example belonging to
+each of the classes.
+
+* Technically, **cross-entropy** comes from the field of information theory and has the unit of
+bits. It is used to estimate the difference between an estimated and a predicted probability
+distribution. 
+
+
+---
+
+
+
+* Importantly, the choice of loss function is directly related to the activation function used in the output layer of your neural network. These two design elements are connected. Think of the configuration of the output layer as a choice about the framing of your prediction problem, and the choice of the loss function as the way to calculate the error for a given framing of your problem.
+
+**Regression Problem**
+* Output Layer Configuration: One node with a linear activation unit.
+* Loss Function: Mean Squared Error (MSE).
+
+**Binary Classification Problem**
+* Output Layer Configuration: One node with a sigmoid activation unit.
+* Loss Function: Cross-Entropy, also referred to as Logarithmic loss.
+
+**Multiclass Classification Problem**
+
+* Output Layer Configuration: One node for each class using the softmax activation
+function.
+* Loss Function: Cross-Entropy, also referred to as Logarithmic loss.
+
+
+
 ---
 class: animated slideInRight fadeOutLeft,  inverse, middle
 
@@ -527,6 +606,8 @@ background-image: url(img/diapo4.jpg)
 background-size: cover
 
 # Learning Rate
+
+
 
 ---
 
