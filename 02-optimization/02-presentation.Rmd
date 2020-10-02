@@ -42,8 +42,8 @@ class: inverse,  middle
 
 
 ## Optimization in Neural Networks
-### Machine Learning Sessions 
-#### Roxana Noelia Villafañe
+### Part 1: Better Learning
+
 
 fecha: `r Sys.Date()`
 
