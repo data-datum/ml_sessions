@@ -804,7 +804,7 @@ background-image: url(img/diapo8.jpg)
 background-size: cover
 
 
-# Activation Functions
+# Fix Vanishing Gradients with RELU
 
 
 ---
@@ -841,7 +841,63 @@ other half, it is referred to as a piecewise linear function or a hinge function
 
 ---
 
-  
+## Advantages of the Rectified Linear Activation Function
+
+* **Computational Simplicity**
+The rectifier function is trivial to implement, requiring a max() function. This is unlike the
+tanh and sigmoid activation function that require the use of an exponential calculation.
+Computations are also cheaper: there is no need for computing the exponential function in activations.
+
+* **Representational Sparsity**
+An important benefit of the rectifier function is that it is capable of outputting a true zero
+value. This is unlike the tanh and sigmoid activation functions that learn to approximate a zero
+output, e.g. a value very close to zero, but not a true zero value. This means that negative
+inputs can output true zero values allowing the activation of hidden layers in neural networks to
+contain one or more true zero values. This is called a sparse representation and is a desirable
+property in representational learning as it can accelerate learning and simplify the model.
+
+* **Linear Behavior**
+Key to this property is that networks trained with this activation function almost completely
+avoid the problem of vanishing gradients, as the gradients remain proportional to the node
+activations.
+
+
+---
+
+## Tips for Using the Rectified Linear Activation
+
+* **Use ReLU as the Default Activation Function**
+
+
+* **Use ReLU with MLPs, CNNs, but Probably Not RNNs**
+Traditionally, LSTMs use the tanh activation function for the activation of the cell state and the sigmoid activation function for the node output. Given their careful design, ReLU were thought to not be appropriate for Recurrent Neural Networks (RNNs) such as the Long Short-Term Memory Network (LSTM) by default.
+
+* **Try a Smaller Bias Input Value**
+
+* **Use He Weight Initialization**
+
+* **Scale Input Data**
+
+* **Use Weight Penalty**
+
+---
+
+## Extensions and Alternatives to ReLU
+
+* Some popular extensions to the ReLU relax the nonlinear output of the function to allow
+small negative values in some way. The **Leaky ReLU (LReLU or LReL)** modifies the function to
+allow small negative values when the input is less than zero.
+
+* The **Exponential Linear Unit, or ELU**, is a generalization of the ReLU that uses a parame-
+terized exponential function to transition from the positive to small negative values.
+
+* The **Parametric ReLU, or PReLU**, learns parameters that control the shape and leaky-ness
+of the function.
+
+* **Maxout** is an alternative piecewise linear function that returns the maximum of the inputs,
+designed to be used in conjunction with the dropout regularization technique.
+
+
 
 
 ---
