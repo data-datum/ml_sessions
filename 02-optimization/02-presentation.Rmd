@@ -1110,11 +1110,17 @@ learning; they are:
 
 ### Weight Initialization
 
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
 The weights in re-used layers may be used as the starting point for the training process and
-adapted in response to the new problem. This usage treats transfer learning as a type of weight
-initialization scheme. This may be useful when the first related problem has a lot more labeled
+adapted in response to the new problem. **This usage treats transfer learning as a type of weight
+initialization scheme.** This may be useful when the first related problem has a lot more labeled
 data than the problem of interest and the similarity in the structure of the problem may be
 useful in both contexts.
+
+]
+
+
+
 
 ---
 ### Feauture Extraction 
