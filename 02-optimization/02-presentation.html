@@ -589,7 +589,7 @@ function.
 * Loss Function: Cross-Entropy, also referred to as Logarithmic loss.
 
 
-
+  
 ---
 class: animated slideInRight fadeOutLeft,  inverse, middle
 
@@ -953,6 +953,162 @@ and then choosing a sensible value.
 * It is common to use the same gradient clipping configuration for all layers in the network.
 Nevertheless, there are examples where a larger range of error gradients are permitted in the
 output layer compared to hidden layers.
+
+
+---
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo11.jpg)
+background-size: cover
+
+
+# Deeper Models with Greedy Layer-Wise Pretraining
+
+
+
+---
+
+## Greedy Layer-Wise Pretraining
+
+As the number
+of hidden layers is increased, the amount of error information propagated back to earlier layers
+is dramatically reduced. This means that weights in hidden layers close to the output layer
+are updated normally, whereas weights in hidden layers close to the input layer are updated
+minimally or not at all. Generally, this problem prevented the training of very deep neural
+networks and was referred to as the vanishing gradient problem. An important milestone in the
+resurgence of neural networks that initially allowed the development of deeper neural network
+models was the technique of greedy layer-wise pretraining, often simply referred to as pretraining.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt1[
+**Pretraining** involves successively adding a new hidden layer to a model and refitting, allowing
+the newly added model to learn the inputs from the existing hidden layer, often while keeping
+the weights for the existing hidden layers fixed. This gives the technique the name **layer-wise** as
+the model is trained one layer at a time. The technique is referred to as **greedy** because of the
+piecewise or layer-wise approach to solving the harder problem of training a deep network. As
+an optimization process, dividing the training process into a succession of layer-wise training
+processes is seen as a greedy shortcut that likely leads to an aggregate of locally optimal solutions,
+a shortcut to a good enough global solution.
+]
+
+
+---
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt1[
+Pretraining is based on the assumption that it is easier to train a shallow network instead of
+a deep network and contrives a layer-wise training process that we are always only ever fitting a
+shallow model.
+
+]
+
+
+The key benefits of pretraining are:
+* **Simplified training process.**
+* **Facilitates the development of deeper networks.**
+* **Useful as a weight initialization scheme.**
+* **Perhaps lower generalization error.**
+In general, pretraining may help both in terms of optimization and in terms of generalization.
+
+There are two main approaches to pretraining; they are:
+* **Supervised greedy layer-wise pretraining.**
+* **Unsupervised greedy layer-wise pretraining.**
+
+
+---
+
+## Supervised and Unsupervised greedy layer-wise pretraining
+
+* Broadly, supervised pretraining involves successively adding hidden layers to a model trained
+on a supervised learning task. Unsupervised pretraining involves using the greedy layer-wise
+process to build up an unsupervised autoencoder model, to which a supervised output layer is
+later added.
+
+* Unsupervised pretraining may be appropriate when you have a significantly larger number of
+unlabeled examples that can be used to initialize a model prior to using a much smaller number
+of examples to fine tune the model weights for a supervised task.
+
+* Although the weights in prior layers are held constant, it is common to fine tune all weights
+in the network at the end after the addition of the final layer. As such, this allows pretraining
+to be considered a type of weight initialization method.
+
+* Nevertheless, it is likely that better performance may be achieved using modern methods
+such as better activation functions, weight initialization, variants of gradient descent, and
+regularization methods.
+
+
+
+---
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo11.jpg)
+background-size: cover
+
+
+# Transfer Learning 
+
+---
+
+## Transfer Learning
+
+An interesting benefit of deep learning neural networks is that they can be reused on related
+problems.
+
+* Transfer learning refers to a technique for predictive modeling on a different but
+somehow similar problem that can then be reused partly or wholly to accelerate the training and
+improve the performance of a model on the problem of interest. In deep learning, this means
+**reusing the weights in one or more layers from a pre-trained network model in a new model
+and either keeping the weights fixed, fine tuning them, or adapting the weights entirely when
+training the model**.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt1[
+Transfer learning and domain adaptation refer to the situation where what has been
+learned in one setting (i.e., distribution P1) is exploited to improve generalization in
+another setting (say distribution P2).
+
+.tr[
+— Page 536, Deep Learning, 2016.
+
+]]
+
+
+
+---
+
+* In deep learning, transfer learning is a technique whereby a neural network model is first
+trained on a problem similar to the problem that is being solved. One or more layers from the
+trained model are then used in a new model trained on the problem of interest.
+
+Transfer learning has the benefit of decreasing the training time for a neural network model,
+resulting in lower generalization error. There are two main approaches to implementing transfer
+learning; they are:
+* **Weight Initialization.**
+* **Feature Extraction.**
+
+The weights in re-used layers may be used as the starting point for the training process and
+adapted in response to the new problem. This usage treats transfer learning as a type of weight
+initialization scheme. This may be useful when the first related problem has a lot more labeled
+data than the problem of interest and the similarity in the structure of the problem may be
+useful in both contexts.
+
+---
+### Important
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+Alternately, the weights of the network may not be adapted in response to the new problem,
+and only new layers after the reused layers may be trained to interpret their output. **This usage
+treats transfer learning as a type of feature extraction scheme.** An example of this approach
+is the re-use of deep convolutional neural network models trained for photo classification as
+feature extractors when developing photo captioning models. **Variations on these usages may
+involve not training the weights of the model on the new problem initially, but later fine tuning
+all weights of the learned model with a small learning rate.**
+]
+
+
+
 
 
 ---
