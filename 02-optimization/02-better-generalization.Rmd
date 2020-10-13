@@ -215,6 +215,8 @@ There are two parts to penalizing the model based on the size of the weights.
 1. The calculation of the size of the weights.
 2. The amount of attention that the optimization process should pay to the penalty.
 
+]
+
 ---
 
 ## Calculate the size of the weights 
