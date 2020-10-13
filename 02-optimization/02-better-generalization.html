@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>02-better-generalization.utf8</title>
+    <meta charset="utf-8" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <link href="libs/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+
+
+
+background-image: url(img/diapo1.jpg)
+background-size: cover
+class: inverse,  middle
+
+
+## Optimization in Neural Networks
+### Part 2: Better Generalization
+
+
+fecha: 2020-10-13
+
+---
+
+## Introduction
+
+### Techniques to reduce overfitting and improve generalization
+* How techniques that reduce model complexity have a **regularizing effect** resulting in less
+overfitting and better generalization.
+* How to add a **penalty to the loss function to encourage smaller model weights**.
+*  How to add a **penalty to the loss function to encourage sparse internal representations**.
+* How to add a **constraint to the model** to force small model weights and lower complexity
+models.
+* How to add **dropout weights** during training to decouple model layers.
+* How to add **noise** to the training process to promote model robustness.
+* How to use **early stopping** to halt model training at the right time.
+
+---
+
+# Fix Overfitting with Regularization
+
+
+### Reduce Overfitting by Constraining Complexity
+
+There are two ways to approach an overfit model:
+
+* 1. Reduce overfitting by training the network on more examples.
+* 2. Reduce overfitting by changing the complexity of the network.
+
+A benefit of very deep neural networks is that their performance continues to improve as
+they are fed larger and larger datasets. A model with a near-infinite number of examples will
+eventually plateau in terms of what the capacity of the network is capable of learning. A model
+can overfit a training dataset because it has sufficient capacity to do so. Reducing the capacity
+of the model reduces the likelihood of the model overfitting the training dataset, to a point
+where it no longer overfits. The capacity of a neural network model, **it’s complexity, is defined by both it’s structure in terms of nodes and layers and the parameters in terms of its weights.**
+
+---
+
+Therefore, we can reduce the complexity of a neural network to **reduce overfitting** in one of two
+ways:
+
+* Change network complexity by changing the **network structure (number of weights)**.
+* Change network complexity by changing the **network parameters (values of weights)**.
+
+It is more common to focus on methods that constrain the size of the weights in a neural
+network because a single network structure can be defined that is under-constrained, e.g. has a
+much larger capacity than is required for the problem, and regularization can be used during
+training to ensure that the model does not overfit.
+
+Techniques that seek to reduce overfitting (reduce generalization error) by keeping
+network weights small are referred to as **regularization methods.** More specifically, regularization
+refers to a class of approaches that add additional information to transform an ill-posed problem
+into a more stable well-posed problem.
+
+---
+
+## Regularization 
+
+* Regularization methods are so widely used to reduce overfitting that the term regularization
+may be used for any method that improves the generalization error of a neural network model.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+
+Regularization is any modification we make to a learning algorithm that is intended
+to reduce its generalization error but not its training error. Regularization is one of
+the central concerns of the field of machine learning, rivaled in its importance only
+by optimization.
+
+.tr[
+— Page 120, Deep Learning, 2016.
+]]
+
+
+---
+
+## Regularization for Neural Networks
+
+The simplest and perhaps most common regularization method is to add a penalty to the loss
+function in proportion to the size of the weights in the model.
+* **Weight Regularization: Penalize the model during training based on the magnitude of the weights.**
+
+This will encourage the model to map the inputs to the outputs of the training dataset
+in such a way that the weights of the model are kept small. This approach is called weight
+regularization or weight decay and has proven very effective for decades for both simpler linear
+models and neural networks.
+
+#### Most common additional regularization methods.
+* **Activity Regularization:** Penalize the model during training based on the magnitude
+of the activations.
+* **Weight Constraint:** Constrain the magnitude of weights to be within a range or below
+a limit.
+* **Dropout:** Probabilistically remove inputs during training.
+* **Noise:** Add statistical noise to inputs during training.
+* **Early Stopping:** Monitor model performance on a validation set and stop training when
+performance degrades.
+
+---
+
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo11.jpg)
+background-size: cover
+
+
+# Penalize Large Weights with Weigth Regularization
+
+
+---
+
+
+## Penalize Large Weights with Weigth Regularization
+
+We will cover these topics:
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+* **Large weights in a neural network are a sign of a more complex network that has overfit
+the training data.**
+* **Penalizing a network based on the size of the network weights during training can reduce
+overfitting.**
+* **An L1 or L2 vector norm penalty can be added to the optimization of the network to
+encourage smaller weights.**
+
+]
+
+---
+
+## Problem with Large Weights
+
+* The longer we train the network, the more specialized the weights will become to the training data, overfitting the training data. The weights will grow in size in order to handle the specifics of the examples seen in the training data. Large weights make the network unstable. Although the weights will be
+specialized to the training dataset, minor variation or statistical noise on the expected inputs
+will result in large differences in the output.
+
+* Generally, we refer to this model as having a large variance and a small bias. That is, the
+model is sensitive to the specific examples, the statistical noise, in the training dataset. 
+
+
+.bg-washed-green.b--dark-green.ba.bw2.br3.shadow-5.ph4.mt2[
+A model with large weights is more complex than a model with smaller weights. It is a sign of a network
+that may be overly specialized to training data. In practice, **we prefer to choose the simpler models to solve a problem (e.g. Occam’s razor). We prefer models with smaller weights.**
+
+]
+
+
+---
+
+Larger weights result in a larger penalty, in the form of a larger loss score. The optimization
+algorithm will then push the model to have smaller weights, i.e. weights no larger than needed
+to perform well on the training dataset. Smaller weights are considered more regular or less
+specialized and as such, we refer to this penalty as weight regularization. When this approach of
+penalizing model coefficients is used in other machine learning models such as linear regression
+or logistic regression, it may be referred to as shrinkage, because the penalty encourages the
+coefficients to shrink during the optimization process.
+
+**The addition of a weight size penalty or weight regularization to a neural network has the effect of reducing generalization error and of allowing the model to pay less attention to less relevant input variables.**
+
+--
+
+### How to Penalize Large Weights
+
+There are two parts to penalizing the model based on the size of the weights.
+
+
+.bg-washed-yellow.b--gold.ba.bw2.br3.shadow-5.ph4.mt2[
+
+1. The calculation of the size of the weights.
+2. The amount of attention that the optimization process should pay to the penalty.
+
+---
+
+## Calculate the size of the weights 
+
+Neural network weights are real-values that can be positive or negative, as such, simply adding
+the weights is not sufficient. There are two main approaches used to calculate the size of the
+weights, they are:
+
+* Calculate the sum of the absolute values of the weights, called the L1 norm (or L1).
+* Calculate the sum of the squared values of the weights, called the L2 norm (or L2).
+
+L1 encourages weights to 0.0 if possible, resulting in more sparse weights (weights with more
+0.0 values). L2 offers more nuance, both penalizing larger weights more severely, but resulting
+in less sparse weights. The use of L2 in linear and logistic regression is often referred to as
+**Ridge Regression.** This is useful to know when trying to develop an intuition for the penalty or
+examples of its usage.
+In other academic communities, L2 regularization is also known as **ridge regression or Tikhonov regularization.**
+
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

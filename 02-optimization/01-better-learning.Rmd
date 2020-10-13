@@ -1,0 +1,1163 @@
+---
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#133354",
+  secondary_color = "#133354",
+  inverse_header_color = "#FFFFFF"
+)
+```
+
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
+xaringanExtra::use_animate_css()
+```
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons()
+```
+
+
+background-image: url(img/diapo1.jpg)
+background-size: cover
+class: inverse,  middle
+
+
+## Optimization in Neural Networks
+### Part 1: Better Learning
+
+
+fecha: `r Sys.Date()`
+
+---
+# Outline
+
+
+* Generalities 
+* Model Capacity 
+* Batch size
+* Loss Function
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Challenge of Configuring Neural Networks
+
+**Configuring neural network models is often referred to as a dark art.**
+This is because there are no hard and fast rules for configuring a network for a given problem. We cannot analytically calculate the optimal model type or model configuration for a given dataset. Instead, there are decades worth of techniques, heuristics, tips, tricks, and other tacit knowledge spread across code, papers, blog posts, and in peoples’ heads. A shortcut to configuring a neural network on a problem is to copy the configuration of another network for a similar problem. But this strategy rarely leads to good results as model configurations are not transferable across problems. It is also likely that you work on predictive modeling problems that are unlike other problems
+described in the literature.
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Challenge of Configuring Neural Networks
+
+There are three types of problems that are straightforward to diagnose with regard to poor performance of a deep learning neural network model; they are:
+* **Problems with Learning.**
+Problems with learning manifest in a model that cannot effectively learn a training dataset or shows slow progress or bad performance when learning the training dataset.
+
+* **Problems with Generalization.** 
+Problems with generalization manifest in a model
+that overfits the training dataset and makes poor predictions on a holdout dataset.
+
+* **Problems with Predictions.**
+Problems with predictions manifest in the stochastic
+training algorithm having a strong influence on the final model, causing high variance in
+behavior and performance.
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Better Deep Learning
+
+There is some natural overlap and interaction between these areas of
+concern. For example, problems with learning affect the ability of the model to generalize as
+well as the variance in the predictions made from a final model. The sequential relationship
+between the three areas in the proposed framework allows the issue of deep learning model
+performance to be first isolated, then targeted with a specific technique or methodology. We
+can summarize techniques that assist with each of these problems as follows:
+
+* **Better Learning.** Techniques that improve or accelerate the adaptation of neural network
+model weights in response to a training dataset.
+
+* **Better Generalization.** Techniques that improve the performance of a neural network
+model on a holdout dataset.
+
+* **Better Predictions.** Techniques that reduce the variance in the performance of a final
+model.
+
+
+
+
+---
+
+class: animated slideInRight fadeOutLeft
+
+
+## Better Learning Techniques
+
+Better learning techniques are those changes to a neural network model or learning algorithm
+that improve or accelerate the adaptation of the model weights in response to a training dataset. In this part, are important the techniques used to improve the adaptation of the
+model weights. This begins with the careful configuration of the capacity of the model and the
+hyperparameters related to optimizing the neural network model using the stochastic gradient
+descent algorithm and updating the weights using the backpropagation of error algorithm; for
+example:
+* **Configure Capacity.** Including including the number of nodes in a layer and the number
+of layers used to define the scope of functions that can be learned by the model.
+* **Configure Batch Size.** Including exploring whether variations such as batch, stochastic
+(online), or minibatch gradient descent are more appropriate.
+* **Configure Loss Function.** Including understanding the way different loss functions
+must be interpreted and whether an alternate loss function would be appropriate for your
+problem.
+* **Configure Learning Rate.** Including understanding the effect of different learning rates
+on your problem and whether modern adaptive learning rate methods such as Adam would
+be appropriate
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+## Better Learning Techniques (2)
+
+This also includes simple data preparation and the automatic rescaling of inputs at deeper
+layers.
+
+* **Data Scaling Techniques.** Including the sensitivity that small network weights have to
+the scale of input variables and the impact of large errors in the target variable have on
+weight updates.
+
+* **Batch Normalization.** Including the sensitivity to changes in the distribution of inputs
+to layers deep in a network model and the benefits of standardizing layer inputs to add
+consistency of input and stability to the learning process.
+
+*Stochastic gradient descent* is a general optimization algorithm that can be applied to a wide
+range of problems. Nevertheless, the optimization process (or learning process) can become
+unstable and specific interventions are required; for example:
+* **Vanishing Gradients.** Prevent the training of deep multiple-layered networks causing
+layers close to the input layer to not have their weights updated; that can be addressed using
+modern activation functions such as the rectified linear activation function.
+* **Exploding Gradients.** Large weight updates cause a numerical overflow or underflow
+making the network weights take on a NaN or Inf value; that can be addressed using
+gradient scaling or gradient clipping.
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+## Better Learning Techniques (3)
+
+The lack of data on some predictive modeling problems can prevent effective learning.
+Specialized techniques can be used to jump-start the optimization process, providing a useful
+initial set of weights or even whole models that can be used for feature extraction; for example:
+
+* **Greedy Layer-Wise Pretraining.** Where layers are added one at a time to a model,
+learning to interpret the output of prior layers and permitting the development of much
+deeper models: a milestone technique in the field of deep learning.
+
+* **Transfer Learning.** Where a model is trained on a different, but somehow related,
+predictive modeling problem and then used to seed the weights or used wholesale as a
+feature extraction model to provide input to a model trained on the problem of interest.
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Better Generalization
+
+Better generalization techniques are those that change the neural network model or learning
+algorithm to reduce the effect of the model overfitting the training dataset and improve the
+performance of the model on a holdout validation or test dataset. Techniques that are designed to reduce generalization error are commonly referred to as regularization techniques. Almost universally, regularization is achieved by somehow reducing or limiting model complexity.
+Perhaps the most widely understood measure of model complexity is the size or magnitude
+of the model weights. A model with large weights is a sign that it may be overly specialized to
+the inputs in the training data, making it unstable when used when making a prediction on new
+unseen data. Keeping weights small via weight regularization is a powerful and widely used
+technique.
+
+* **Weight Regularization.** A change to the loss function that penalizes a model in
+proportion to the norm (magnitude) of the model weights, encouraging smaller weights
+and, in turn, a lower complexity model 
+
+* **Weight Constraint.** Update to the model to rescale the weights when the vector norm
+of the weights exceeds a threshold 
+
+* **Activity Regularization.** A change to the loss function that penalizes a model in
+proportion to the norm (magnitude) of the layer activations, encouraging smaller or more
+sparse internal representations.
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Better Generalization (2)
+
+Noise can be added to the model to encourage robustness with regard to the raw inputs or
+outputs from prior layers during training; for example:
+
+
+* **Dropout.** Probabilistically removing connections (weights) while training the network to
+break tight coupling between nodes across layers.
+
+* **Input Noise.** Addition of statistical variation or noise at the input layer or between
+hidden layers to reduce the model’s dependence on specific input values.
+Often, overfitting can occur due simply to training the model for too long on the training
+dataset. A simple solution is to stop the training early.
+
+* **Early Stopping.** Monitor model performance on the hold out validation dataset during
+training and stop the training process when performance on the validation set starts to
+degrade.
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+# Introduction 
+
+* A neural network model uses the examples to learn how to map specific sets of input variables to the output variable. It must do this in such a way that this mapping works well for the training dataset, but also works well on new examples not seen by the model during training. This ability to work well on specific examples and new examples is called the ability of the model to generalize.
+
+
+* A multilayer perceptron is just a mathematical function mapping some set of input
+values to output values.
+
+
+* Training error and generalization error generally differ: since the objective function of the optimization algorithm is usually a loss function based on the training dataset, the goal of optimization is to reduce the training error. However, the goal of statistical inference (and thus of deep learning) is to reduce the generalization error.
+
+
+
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+```{r echo=FALSE, out.width = '50%', fig.align='center'}
+knitr::include_graphics("img/error.png")
+```
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+The goals of optimization and deep learning are fundamentally different. The former is primarily concerned with minimizing an objective whereas the latter is concerned with finding a suitable model.
+]
+
+---
+class: animated slideInRight fadeOutLeft
+
+### When talking about optimization in the context of neural networks, we are discussing non-convex optimization.
+
+*Convex optimization* involves a function in which there is only one optimum, corresponding to the global optimum (maximum or minimum). There is no concept of local optima for convex optimization problems, making them relatively easy to solve — these are common introductory topics in undergraduate and graduate optimization classes.
+
+*Non-convex optimization* involves a function which has multiple optima, only one of which is the global optima. Depending on the loss surface, it can be very difficult to locate the global optima.
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+.panelset[
+.panel[.panel-name[Convex functions]
+
+```{r echo=FALSE, out.width = '65%', fig.align='center'}
+knitr::include_graphics("img/convex.png")
+```
+]
+
+.panel[.panel-name[Non convex functions]
+
+```{r echo=FALSE, out.width = '70%', fig.align='center'}
+knitr::include_graphics("img/nonconvex.png")
+```
+]
+
+.panel[.panel-name[Saddle points]
+
+A flat region or saddle point is a point on the landscape where the gradient is zero. 
+```{r echo=FALSE, out.width = '70%', fig.align='center'}
+knitr::include_graphics("img/saddle.png")
+```
+]
+]
+
+
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+# Navigating the Non-Convex Error Surface
+
+* A change to the model weights will result in a change to the model error.
+
+* The settling of the optimization process on a solution is referred to as **convergence**, as
+the process has converged on a solution.
+
+* This is a search or an optimization process and we refer to optimization algorithms that
+operate in this way as gradient optimization algorithms, as they naively follow along the error gradient. The algorithm that is most commonly used to navigate the error surface is called **stochastic gradient descent**, or SGD for short.
+
+* Stochastic Gradient Descent is more efficient as it uses the gradient information specifically to update the model weights via an algorithm called **backpropagation**.
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+* Backpropagation refers to a technique from calculus to calculate the derivative of the model error for specific model parameters, allowing model weights to be updated to move down the gradient.
+
+* Video from RIIAA 2020
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/9bfCUXaj6cY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+class: animated slideInRight fadeOutLeft
+
+## Components of the learning algorithm 
+
+Training a deep learning neural network model using stochastic gradient descent with backpropagation involves choosing a number of components and hyperparameters, they are:
+
+* Network Topology.
+* Loss Function.
+* Weight Initialization.
+* Learning Rate.
+* Batch Size.
+* Epochs.
+* Data Preparation.
+
+---
+class: animated slideInRight fadeOutLeft
+
+# Network Topology
+
+* The capacity of a neural network defines the scope of the mapping functions that the model can approximate. 
+* A larger capacity means that the model is more flexible, but harder to train as it has many more parameters that have to be learned and provides a more challenging optimization problem to solve. 
+* The number of nodes in the hidden layer define the capacity, and a network with a single hidden layer with a sufficient number of nodes can approximate any mapping function (so-called universal approximation). 
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Network topology is the number of nodes (or equivalent) in the hidden layers and the
+number of hidden layers in the network.
+
+]
+---
+class: animated slideInRight fadeOutLeft
+
+# Loss Function
+
+An error function must be chosen, often called the objective function, cost function, or the loss function. Typically, a specific probabilistic framework for inference is chosen called Maximum Likelihood. Under this framework, the commonly chosen loss functions are cross-entropy for
+classification problems and mean squared error for regression problems.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Loss Function is the function used to measure the performance of a model with a specific
+set of weights on examples from the training dataset
+
+]
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+# Weigth initialization
+
+The search or optimization process requires a starting point from which to begin model
+updates. The starting point is defined by the initial model parameters or weights. Because
+the error surface is non-convex, the optimization algorithm is sensitive to the initial starting point. As such, small random values are chosen as the initial model weights, although different techniques can be used to select the scale and distribution of these values. These techniques are referred to as weight initialization methods. This can be tied to the choice of activation function.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Weight initialization is the procedure by which the initial small random values are
+assigned to model weights at the beginning of the training process.
+
+
+]
+
+---
+class: animated slideInRight fadeOutLeft
+
+# Batch size
+
+When updating the model, a number of examples from the training dataset must be used to
+calculate the model error, often referred to simply as loss. All examples in the training dataset may be used, which may be appropriate for smaller datasets. Alternately, a single example may be used which may be appropriate for problems where examples are streamed or where the data changes often. A hybrid approach may be used where the number of examples from the training dataset may be chosen and used to used to estimate the error gradient. The choice of the number of examples is referred to as the batch size.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Batch Size is the number of examples used to estimate the error gradient before updating
+the model parameters.
+
+]
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+# Learning Rate
+
+* Once an error gradient has been estimated, the derivative of the activation function can be calculated and used to update each parameter. There may be statistical noise in the training dataset and in the estimate of the error gradient. Also, the depth of the model (number of layers) and the fact that model parameters are updated separately means that it is hard to calculate exactly how much to change each model parameter to best way to move the whole model down the error surface. 
+
+* Instead, a small portion of the update to the weights is performed each iteration. A hyperparameter called the learning rate controls how much to update model weights and, in turn, controls how fast a model learns on the training dataset.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Learning Rate is the amount that each model parameter is updated per iteration of the
+learning algorithm.
+
+]
+
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+# Epochs
+
+* The training process must be repeated many times until a good or good enough set of
+model parameters is discovered. The total number of iterations of the process is bounded by
+the number of complete passes through the training dataset after which the training process
+is terminated. This is referred to as the number of training epochs. This hyperparameter is
+tightly related to both the choice of learning rate and batch size and can be set to a large value and almost ignored when using some regularization methods.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Epochs is the number of complete passes through the training dataset before the training
+process is terminated.
+
+]
+
+
+
+
+
+---
+class: animated slideInRight fadeOutLeft, inverse,  middle
+
+background-image: url(img/diapo2.jpg)
+background-size: cover
+
+# Model Capacity 
+---
+
+class: animated slideInRight fadeOutLeft
+
+# Model Capacity & Network Topology
+
+* Neural networks learn mapping functions. The capacity of a network refers to the range or scope of the functions that the model can approximate.
+
+* Informally, a model’s capacity is its ability to fit a wide variety of functions.
+
+* A model with less capacity may not be able to sufficiently learn the training dataset. A
+model with more capacity can model more different functions and may be able to learn a
+function to sufficiently map inputs to outputs in the training dataset. Whereas a model with too much capacity may memorize the training dataset and fail to generalize or get lost or stuck in the search for a suitable mapping function. Generally, we can think of model capacity as a control over whether the model is likely to underfit or overfit a training dataset.
+
+**We can control whether a model is more likely to overfit or underfit by altering its
+capacity.**
+
+
+
+---
+class: animated slideInRight fadeOutLeft
+
+
+The capacity of a neural network can be controlled by two aspects of the model:
+* Number of Nodes.
+* Number of Layers.
+
+
+A model with more nodes or more layers has a greater capacity and, in turn, is potentially
+capable of navigating a larger set of mapping functions.
+
+```{r echo=FALSE, out.width = '100%', fig.align='center'}
+knitr::include_graphics("img/depth.png")
+```
+
+
+  
+---
+
+class: animated slideInRight fadeOutLeft,  middle
+
+background-image: url(img/diapo3.jpg)
+background-size: cover
+
+# Batch size 
+
+---
+
+# Batch size
+
+* Neural networks are trained using the stochastic gradient descent optimization algorithm. This involves using the current state of the model to make a prediction, comparing the prediction to the actual values, and using the difference as an estimate of the error gradient. 
+
+* This error gradient is then used to update the model weights and the process is repeated. The error gradient is a statistical estimate. The more training examples used in the estimate, the more accurate this estimate will be and the more likely that the weights of the network will be adjusted in a way that will improve the performance of the model. 
+
+* The improved estimate of the error gradient comes at the computational cost of having to use the model to make many more predictions before the estimate can be calculated, and in turn, the weights updated.
+
+---
+
+# Batch size
+
+The number of training examples used in the estimate of the error gradient is a hyperparameter for the learning algorithm called the batch size, or simply the batch. 
+
+A batch size of 32 means that 32 samples from the training dataset will be used to estimate the error gradient before the model weights are updated.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+* **Batch Gradient Descent**. Batch size is set to the total number of examples in the
+training dataset.
+* **Stochastic Gradient Descent.** Batch size is set to one.
+* **Minibatch Gradient Descent.** Batch size is set to more than one and less than the
+total number of examples in the training dataset.
+
+]
+
+
+
+
+---
+class: animated slideInRight fadeOutLeft,  middle
+
+background-image: url(img/diapo9.jpg)
+background-size: cover
+
+
+## Loss Function
+
+
+
+    
+
+---
+
+
+## Loss Function
+
+* In the context of an optimization algorithm, the function used to evaluate a candidate solution
+(i.e. a set of weights) is referred to as the objective function. We may seek to *maximize or minimize the objective function*, meaning that we are searching for a candidate solution that has
+the highest or lowest score respectively. Typically, with neural networks, we seek to minimize
+the error. As such, the objective function is often referred to as a cost function or a loss function and the value calculated by the loss function is referred to as simply loss.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+The function we want to minimize or maximize is called the **objective function** or criterion. When we are minimizing it, we may also call it the **cost function**, **loss function**, or **error function**.
+]
+
+
+
+---
+
+## Maximum Likelihood estimate (MLE)
+
+
+* There are many functions that could be used to estimate the error of a set of weights in a neural
+network. We prefer a function where the space of candidate solutions maps onto a smooth
+(but high-dimensional) landscape that the optimization algorithm can reasonably navigate via
+iterative updates to the model weights. Maximum likelihood estimation, or MLE, is a framework
+for inference for finding the best statistical estimates of parameters from historical training data: exactly what we are trying to do with the neural network.
+
+* A benefit of using maximum likelihood as a framework for estimating the model parameters
+(weights) for neural networks and in machine learning in general is that as the number of
+examples in the training dataset is increased, the estimate of the model parameters improves.
+This is called the property of consistency.
+
+
+---
+
+## Maximum Likelihood and Cross-Entropy
+
+* Under the **maximum likelihood framework**, the error between two probability distributions is
+measured using **cross-entropy**. When modeling a classification problem where we are interested in
+mapping input variables to a class label, we can model the problem as predicting the probability
+of an example belonging to each class. In a binary classification problem, there would be two
+classes, so we may predict the probability of the example belonging to the first class. In the
+case of multiple-class classification, we can predict a probability for the example belonging to
+each of the classes.
+
+* Technically, **cross-entropy** comes from the field of information theory and has the unit of
+bits. It is used to estimate the difference between an estimated and a predicted probability
+distribution. 
+
+
+---
+
+
+
+* Importantly, the choice of loss function is directly related to the activation function used in the output layer of your neural network. These two design elements are connected. Think of the configuration of the output layer as a choice about the framing of your prediction problem, and the choice of the loss function as the way to calculate the error for a given framing of your problem.
+
+**Regression Problem**
+* Output Layer Configuration: One node with a linear activation unit.
+* Loss Function: Mean Squared Error (MSE).
+
+**Binary Classification Problem**
+* Output Layer Configuration: One node with a sigmoid activation unit.
+* Loss Function: Cross-Entropy, also referred to as Logarithmic loss.
+
+**Multiclass Classification Problem**
+
+* Output Layer Configuration: One node for each class using the softmax activation
+function.
+* Loss Function: Cross-Entropy, also referred to as Logarithmic loss.
+
+
+  
+---
+class: animated slideInRight fadeOutLeft,  inverse, middle
+
+background-image: url(img/diapo4.jpg)
+background-size: cover
+
+# Learning Rate
+
+
+
+---
+
+# Learning Rate
+
+The weights of a neural network cannot be calculated using an analytical method. 
+
+Instead, the weights must be discovered via an empirical optimization procedure called stochastic gradient descent. The optimization problem addressed by stochastic gradient descent for neural networks is challenging and the space of solutions (sets of weights) may be comprised of many good solutions (called global optima) as well as easy to find, but low in skill solutions (called local optima). 
+
+The amount of change to the model during each step of this search process, or the step size, is called the learning rate and provides perhaps the most important hyperparameter to tune for your neural network in order to achieve good performance on your problem.
+
+---
+
+### Efect of the learning rate
+
+* The learning rate hyperparameter controls the rate or speed at which the model learns. Specifically, it controls the amount of apportioned error that the weights of the model are updated with each time they are updated, such as at the end of each batch of training examples. Given a perfectly configured learning rate, the model will learn to best
+approximate the function given available resources (the number of layers and the number of
+nodes per layer) in a given number of training epochs (passes through the training data).
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+* Generally, **a large learning rate allows the model to learn faster**, at the cost of arriving on a sub-optimal final set of weights. A smaller learning rate may allow the model to learn a more optimal or even globally optimal set of weights but may take significantly longer to train.
+]
+
+* At extremes, a learning rate that is too large will result in weight updates that will be too large and the performance of the model (such as its loss on the training dataset) will oscillate over training epochs.
+
+
+---
+
+## How to configure a learning rate
+
+* The learning rate will interact with many other aspects of the optimization process, and the interactions may be nonlinear. Nevertheless, in general, smaller learning rates will require more training epochs. Conversely, larger learning rates will require fewer training epochs. Further, smaller batch sizes are better suited to smaller learning rates given the noisy estimate of the error gradient. A traditional default value for the learning rate is 0.1 or 0.01, and this may represent a good starting point on your problem.
+
+
+* Unfortunately, we cannot analytically calculate the optimal learning rate for a given model on a given dataset. Instead, a good (or good enough) learning rate must be discovered via trial and error.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+The range of values to consider for the learning rate is less than 1.0 and greater than 10 −6.
+]
+
+
+
+---
+
+# Momentum
+
+* Training a neural network can be made easier with the addition of history to the weight update. Specifically, an exponentially weighted average of the prior updates to the weight can be included when the weights are updated. This change to stochastic gradient descent is called momentum and adds inertia to the update procedure, causing many past updates in one direction to continue in that direction in the future.
+
+* Momentum can accelerate learning on those problems where the high-dimensional weight
+space that is being navigated by the optimization process has structures that mislead the
+gradient descent algorithm, such as flat regions or steep curvature.
+
+* It has the effect of smoothing the optimization process, slowing updates to continue in the previous direction instead of getting stuck or oscillating.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Momentum is set to a value greater than 0.0 and less than one, where common values such
+as 0.9 and 0.99 are used in practice.
+Common values of [momentum] used in practice include .5, .9, and .99.
+]
+
+---
+
+## Momentum and Steepest Descent
+
+* Video from RIIAA 2020
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/hW8BhS9tkYY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+---
+
+class: animated slideInRight fadeOutLeft,  inverse, middle
+
+background-image: url(img/diapo5.jpg)
+background-size: cover
+
+
+# Adaptive Learning Rates
+# (Optimizers)
+
+---
+
+# Adagrad 
+
+* Adagrad decreases the learning rate dynamically on a per-coordinate basis.
+
+* It uses the magnitude of the gradient as a means of adjusting how quickly progress is achieved - coordinates with large gradients are compensated with a smaller learning rate.
+
+* Computing the exact second derivative is typically infeasible in deep learning problems due to memory and computational constraints. The gradient can be a useful proxy.
+
+* If the optimization problem has a rather uneven uneven structure Adagrad can help mitigate the distortion.
+
+* Adagrad is particularly effective for sparse features where the learning rate needs to decrease more slowly for infrequently occurring terms.
+
+* On deep learning problems Adagrad can sometimes be too aggressive in reducing learning rates.
+
+* For implementations from scratch http://d2l.ai/chapter_optimization/adagrad.html 
+
+---
+
+# RMSProp
+
+* One of the key issues in Adagrad is that the learning rate decreases at a predefined schedule of effectively O(t−12)
+
+* While this is generally appropriate for convex problems, it might not be ideal for nonconvex ones, such as those encountered in deep learning. Yet, the coordinate-wise adaptivity of Adagrad is highly desirable as a preconditioner.
+
+* [Tieleman & Hinton, 2012] proposed the RMSProp algorithm as a simple fix to decouple rate scheduling from coordinate-adaptive learning rates.
+
+* RMSProp is very similar to Adagrad insofar as both use the square of the gradient to scale coefficients.
+
+* RMSProp shares with momentum the leaky averaging. However, RMSProp uses the technique to adjust the coefficient-wise preconditioner.
+
+* The learning rate needs to be scheduled by the experimenter in practice.
+
+* For implementations from the scratch http://d2l.ai/chapter_optimization/rmsprop.html 
+
+* Andrew Ng's video [link](https://bit.ly/rmsprop)
+´
+---
+
+# Adadelta
+
+* Adadelta is yet another variant of AdaGrad (Section 11.7). The main difference lies in the fact that it decreases the amount by which the learning rate is adaptive to coordinates. Moreover, traditionally it referred to as not having a learning rate since it uses the amount of change itself as calibration for future change. The algorithm was proposed in [Zeiler, 2012].
+
+* Adadelta has no learning rate parameter. Instead, it uses the rate of change in the parameters itself to adapt the learning rate.
+
+* Adadelta requires two state variables to store the second moments of gradient and the change in parameters.
+
+* Adadelta uses leaky averages to keep a running estimate of the appropriate statistics.
+
+* For implementations from the scratch http://d2l.ai/chapter_optimization/adadelta.html 
+
+---
+
+# Adam
+
+* Adam [Kingma & Ba, 2014](https://arxiv.org/pdf/1412.6980.pdf) combines all these techniques into one efficient learning algorithm. As expected, this is an algorithm that has become rather popular as one of the more robust and effective optimization algorithms to use in deep learning. 
+
+* In particular, [Reddi et al., 2019](https://arxiv.org/abs/1904.09237) show that there are situations where Adam can diverge due to poor variance control. In a follow-up work [Zaheer et al., 2018](https://papers.nips.cc/paper/8186-adaptive-methods-for-nonconvex-optimization.pdf) proposed a hotfix to Adam, called **Yogi** which addresses these issues. 
+
+* For implementations from the scratch http://d2l.ai/chapter_optimization/adam.html 
+
+* Andrew Ng's video [link](https://bit.ly/adam-nn) 
+---
+
+class: animated slideInRight fadeOutLeft, middle
+
+background-image: url(img/diapo7.jpg)
+background-size: cover
+
+
+# Batch Normalization
+
+
+---
+
+# Batch Normalization 
+
+* Training deep neural networks with tens of layers is challenging as they can be sensitive to the initial random weights and configuration of the learning algorithm. One possible reason for this difficulty is the distribution of the inputs to layers deep in the network may change after each minibatch when the weights are updated. This can cause the learning algorithm to forever chase a moving target. This change in the distribution of inputs to layers in the network is referred to by the technical name internal covariate shift.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+Batch normalization is a technique for training very deep neural networks that standardizes the inputs to a layer for each minibatch. This has the effect of stabilizing the learning process and dramatically reducing the number of training epochs required to train deep networks. 
+]
+
+
+Video explanation [link](https://www.youtube.com/watch?v=DtEq44FTPM4) 
+---
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo10.jpg)
+background-size: cover
+
+
+# Fix Vanishing Gradients with RELU
+
+
+---
+
+## Activation Functions
+
+A neural network is comprised of layers of nodes and learns to map examples of inputs to outputs. For a given node, the inputs are multiplied by the weights in a node and summed together. This value is referred to as the summed activation of the node. The summed activation is then transformed via an activation function and defines the specific output or activation of the node. The simplest activation function is referred to as the linear activation, where no transform is applied at all. A network comprised of only linear activation functions is very easy to train, but cannot learn complex mapping functions.
+
+Nonlinear activation functions are preferred as they allow the nodes to learn more complex
+structures in the data. Traditionally, two widely used nonlinear activation functions are the sigmoid and hyperbolic tangent activation functions.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+A general problem with both the sigmoid and tanh functions is that they saturate. **Once saturated, it becomes challenging for the learning algorithm to continue to adapt the weights to improve the performance of the model.**
+]
+
+
+---
+
+## Rectified Linear Units (RELU)
+
+The solution is to use the rectified linear activation function, or ReL for short. A node or unit that implements this activation function is referred to as a rectified linear activation unit, or ReLU for short. Often, networks that use the rectifier function for the hidden layers are referred to as rectified networks.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt1[
+g(z) = max{0, z}
+]
+
+Because rectified linear units are nearly linear, they preserve many of the properties
+that make linear models easy to optimize with gradient-based methods. They also
+preserve many of the properties that make linear models generalize well.<sup>1</sup> Because the rectified function is linear for half of the input domain and nonlinear for the
+other half, it is referred to as a piecewise linear function or a hinge function.
+
+
+.footnote[<sup>1</sup> Deep Learning, 2016. For other activation functions https://mlfromscratch.com/activation-functions-explained/#/]
+
+---
+
+## Advantages of the Rectified Linear Activation Function
+
+* **Computational Simplicity**
+The rectifier function is trivial to implement, requiring a max() function. This is unlike the
+tanh and sigmoid activation function that require the use of an exponential calculation.
+Computations are also cheaper: there is no need for computing the exponential function in activations.
+
+* **Representational Sparsity**
+An important benefit of the rectifier function is that it is capable of outputting a true zero
+value. This is unlike the tanh and sigmoid activation functions that learn to approximate a zero
+output, e.g. a value very close to zero, but not a true zero value. This means that negative
+inputs can output true zero values allowing the activation of hidden layers in neural networks to
+contain one or more true zero values. This is called a sparse representation and is a desirable
+property in representational learning as it can accelerate learning and simplify the model.
+
+* **Linear Behavior**
+Key to this property is that networks trained with this activation function almost completely
+avoid the problem of vanishing gradients, as the gradients remain proportional to the node
+activations.
+
+
+---
+
+## Tips for Using the Rectified Linear Activation
+
+* **Use ReLU as the Default Activation Function**
+
+
+* **Use ReLU with MLPs, CNNs, but Probably Not RNNs**
+Traditionally, LSTMs use the tanh activation function for the activation of the cell state and the sigmoid activation function for the node output. Given their careful design, ReLU were thought to not be appropriate for Recurrent Neural Networks (RNNs) such as the Long Short-Term Memory Network (LSTM) by default.
+
+* **Try a Smaller Bias Input Value**
+
+* **Use He Weight Initialization**
+
+* **Scale Input Data**
+
+* **Use Weight Penalty**
+
+---
+
+## Extensions and Alternatives to ReLU
+
+* Some popular extensions to the ReLU relax the nonlinear output of the function to allow
+small negative values in some way. The **Leaky ReLU (LReLU or LReL)** modifies the function to
+allow small negative values when the input is less than zero.
+
+* The **Exponential Linear Unit, or ELU**, is a generalization of the ReLU that uses a parame-
+terized exponential function to transition from the positive to small negative values.
+
+* The **Parametric ReLU, or PReLU**, learns parameters that control the shape and leaky-ness
+of the function.
+
+* **Maxout** is an alternative piecewise linear function that returns the maximum of the inputs,
+designed to be used in conjunction with the dropout regularization technique.
+
+
+
+
+---
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo10.jpg)
+background-size: cover
+
+
+# Fix Exploding Gradients with Gradient Clipping
+
+
+---
+
+## Gradient Clipping
+
+Training a neural network can become unstable given the choice of error function, learning
+rate, or even the scale of the target variable. Large updates to weights during training can
+cause a numerical overflow or underflow often referred to as exploding gradients. The problem
+of exploding gradients is more common with recurrent neural networks, such as LSTMs given
+the accumulation of gradients unrolled over hundreds of input time steps. 
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+A common and relatively easy solution to the exploding gradients problem is to change the derivative of the error before propagating it backward through the network and using it to update the weights. Two approaches include rescaling the gradients given a chosen vector norm and clipping gradient values that exceed a preferred range. Together, these methods are referred to as **gradient clipping**.
+]
+
+
+
+---
+
+Neural networks are trained using the stochastic gradient descent optimization algorithm. This
+requires first the estimation of the loss on one or more training examples, then the calculation of
+the derivative of the loss, which is propagated backward through the network in order to update
+the weights. Weights are updated using a fraction of the back propagated error controlled by
+the learning rate. It is possible for the updates to the weights to be so large that the weights
+either overflow or underflow their numerical precision. In practice, the weights can take on
+the value of an NaN (not a number) or Inf (infinity) when they overflow or underflow and for practical purposes the network will be useless from that point forward, forever predicting NaN
+values as signals flow through the invalid weights.
+
+
+The underflow or overflow of weights is generally refers to as an instability of the network
+training process and is known by the name exploding gradients as the unstable training process
+causes the network to fail to train in such a way that the model is essentially useless. 
+
+In a given neural network, such as a **Convolutional Neural Network or Multilayer Perceptron**, this can
+happen due to a poor choice of configuration. Some examples include:
+* Poor choice of learning rate that results in large weight updates.
+* Poor choice of data preparation, allowing large differences in the target variable.
+* Poor choice of loss function, allowing the calculation of large error values.
+
+
+---
+
+A common solution to exploding gradients is to change the error derivative before propagating
+it backward through the network and using it to update the weights. By rescaling the error
+derivative, the updates to the weights will also be rescaled, dramatically decreasing the likelihood
+of an overflow or underflow. There are two main methods for updating the error derivative; they
+are:
+* **Gradient Scaling.**
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt3[
+**Gradient scaling** involves normalizing the error gradient vector such that vector norm
+(magnitude) equals a defined value, such as 1.0. 
+]
+
+* **Gradient Clipping.**
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+**Gradient clipping** involves forcing the gradient values (element-wise) to a specific minimum
+or maximum value if the gradient exceeded an expected range. Together, these methods are
+often simply referred to as gradient clipping.
+]
+
+
+
+---
+
+* It is a method that only addresses the numerical stability of training deep neural network
+models and does not offer any general improvement in performance. The value for the gradient
+vector norm or preferred range can be configured by trial and error, by using common values
+used in the literature or by first observing common vector norms or ranges via experimentation
+and then choosing a sensible value.
+  
+  
+* It is common to use the same gradient clipping configuration for all layers in the network.
+Nevertheless, there are examples where a larger range of error gradients are permitted in the
+output layer compared to hidden layers.
+
+
+---
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo11.jpg)
+background-size: cover
+
+
+# Deeper Models with Greedy Layer-Wise Pretraining
+
+
+
+---
+
+## Greedy Layer-Wise Pretraining
+
+As the number
+of hidden layers is increased, the amount of error information propagated back to earlier layers
+is dramatically reduced. This means that weights in hidden layers close to the output layer
+are updated normally, whereas weights in hidden layers close to the input layer are updated
+minimally or not at all. Generally, this problem prevented the training of very deep neural
+networks and was referred to as the vanishing gradient problem. An important milestone in the
+resurgence of neural networks that initially allowed the development of deeper neural network
+models was the technique of greedy layer-wise pretraining, often simply referred to as pretraining.
+
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt1[
+**Pretraining** involves successively adding a new hidden layer to a model and refitting, allowing
+the newly added model to learn the inputs from the existing hidden layer, often while keeping
+the weights for the existing hidden layers fixed. This gives the technique the name **layer-wise** as
+the model is trained one layer at a time. The technique is referred to as **greedy** because of the
+piecewise or layer-wise approach to solving the harder problem of training a deep network. As
+an optimization process, dividing the training process into a succession of layer-wise training
+processes is seen as a greedy shortcut that likely leads to an aggregate of locally optimal solutions,
+a shortcut to a good enough global solution.
+]
+
+
+---
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt1[
+Pretraining is based on the assumption that it is easier to train a shallow network instead of
+a deep network and contrives a layer-wise training process that we are always only ever fitting a
+shallow model.
+
+]
+
+
+The key benefits of pretraining are:
+* **Simplified training process.**
+* **Facilitates the development of deeper networks.**
+* **Useful as a weight initialization scheme.**
+* **Perhaps lower generalization error.**
+In general, pretraining may help both in terms of optimization and in terms of generalization.
+
+There are two main approaches to pretraining; they are:
+* **Supervised greedy layer-wise pretraining.**
+* **Unsupervised greedy layer-wise pretraining.**
+
+
+---
+
+## Supervised and Unsupervised greedy layer-wise pretraining
+
+* Broadly, supervised pretraining involves successively adding hidden layers to a model trained
+on a supervised learning task. Unsupervised pretraining involves using the greedy layer-wise
+process to build up an unsupervised autoencoder model, to which a supervised output layer is
+later added.
+
+* Unsupervised pretraining may be appropriate when you have a significantly larger number of
+unlabeled examples that can be used to initialize a model prior to using a much smaller number
+of examples to fine tune the model weights for a supervised task.
+
+* Although the weights in prior layers are held constant, it is common to fine tune all weights
+in the network at the end after the addition of the final layer. As such, this allows pretraining
+to be considered a type of weight initialization method.
+
+* Nevertheless, it is likely that better performance may be achieved using modern methods
+such as better activation functions, weight initialization, variants of gradient descent, and
+regularization methods.
+
+
+
+---
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo11.jpg)
+background-size: cover
+
+
+# Transfer Learning 
+
+---
+
+## Transfer Learning
+
+An interesting benefit of deep learning neural networks is that they can be reused on related
+problems.
+
+* Transfer learning refers to a technique for predictive modeling on a different but
+somehow similar problem that can then be reused partly or wholly to accelerate the training and
+improve the performance of a model on the problem of interest. In deep learning, this means
+**reusing the weights in one or more layers from a pre-trained network model in a new model
+and either keeping the weights fixed, fine tuning them, or adapting the weights entirely when
+training the model**.
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt1[
+Transfer learning and domain adaptation refer to the situation where what has been
+learned in one setting (i.e., distribution P1) is exploited to improve generalization in
+another setting (say distribution P2).
+
+.tr[
+— Page 536, Deep Learning, 2016.
+
+]]
+
+
+
+---
+
+* In deep learning, transfer learning is a technique whereby a neural network model is first
+trained on a problem similar to the problem that is being solved. One or more layers from the
+trained model are then used in a new model trained on the problem of interest.
+
+Transfer learning has the benefit of decreasing the training time for a neural network model,
+resulting in lower generalization error. There are two main approaches to implementing transfer
+learning; they are:
+* **Weight Initialization.**
+* **Feature Extraction.**
+
+### Weight Initialization
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+The weights in re-used layers may be used as the starting point for the training process and
+adapted in response to the new problem. **This usage treats transfer learning as a type of weight
+initialization scheme.** This may be useful when the first related problem has a lot more labeled
+data than the problem of interest and the similarity in the structure of the problem may be
+useful in both contexts.
+
+]
+
+
+
+
+---
+### Feauture Extraction 
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt5[
+Alternately, the weights of the network may not be adapted in response to the new problem,
+and only new layers after the reused layers may be trained to interpret their output. **This usage
+treats transfer learning as a type of feature extraction scheme.** An example of this approach
+is the re-use of deep convolutional neural network models trained for photo classification as
+feature extractors when developing photo captioning models. **Variations on these usages may
+involve not training the weights of the model on the new problem initially, but later fine tuning
+all weights of the learned model with a small learning rate.**
+]
+
+
+
+
+
+---
+
+# Bibliography
+
+* A disciplined approach to neural network hyper-parameters: Part 1 -- learning rate, batch size, momentum, and weight decay https://arxiv.org/abs/1803.09820 
+
+* Optimization algorithms http://d2l.ai/chapter_optimization/index.html 
+
+* An overview of gradient descent optimization algorithms https://ruder.io/optimizing-gradient-descent/ 
+
+* Why Momentum Really Works https://distill.pub/2017/momentum/ 
+
+* Andrew Ng's Momentum video [link](https://bit.ly/SGD-momentum)
+
+* Cyclical Learning Rates for Training Neural Networks https://arxiv.org/abs/1506.01186 
+
+* A Survey of Optimization Methods from a Machine Learning Perspective https://arxiv.org/abs/1906.06821 
+
+
+  
+
+  
