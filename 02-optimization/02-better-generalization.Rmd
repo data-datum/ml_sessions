@@ -36,7 +36,7 @@ xaringanExtra::use_tachyons()
 ```
 
 
-background-image: url(img/diapo1.jpg)
+background-image: url(img/city.jpg)
 background-size: cover
 class: inverse,  middle
 
@@ -225,8 +225,13 @@ Neural network weights are real-values that can be positive or negative, as such
 the weights is not sufficient. There are two main approaches used to calculate the size of the
 weights, they are:
 
-* Calculate the sum of the absolute values of the weights, called the L1 norm (or L1).
-* Calculate the sum of the squared values of the weights, called the L2 norm (or L2).
+.bg-washed-yellow.b--gold.ba.bw2.br3.shadow-5.ph4.mt2[
+
+* Calculate the sum of the absolute values of the weights, called the **L1 norm (or L1)**.
+* Calculate the sum of the squared values of the weights, called the **L2 norm (or L2)**.
+
+]
+
 
 L1 encourages weights to 0.0 if possible, resulting in more sparse weights (weights with more
 0.0 values). L2 offers more nuance, both penalizing larger weights more severely, but resulting
