@@ -395,11 +395,15 @@ We will cover these topics:
 
 .bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
 
-* **Neural networks learn features from data and models, such as autoencoders and encoder-
-decoder models, and explicitly seek effective learned representations.**
+* Neural networks learn features from data and models, such as autoencoders and encoder-
+decoder models, and explicitly seek effective learned representations.
 * **Similar to weights, large values in learned features, e.g. large activations, may indicate an
 overfit model.**
 * **The addition of penalties to the loss function that penalize a model in proportion to the
 magnitude of the activations may result in more robust and generalized learned features.**
 
 ]
+
+
+---
+
