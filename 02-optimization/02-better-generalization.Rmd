@@ -243,3 +243,27 @@ In other academic communities, L2 regularization is also known as **ridge regres
 
 ---
 
+### Weight decay
+
+The weights may be considered a vector and the magnitude of a vector is called its norm,
+from linear algebra. As such, penalizing the model based on the size of the weights is also
+referred to as a weight or parameter norm penalty. **It is possible to include both L1 and L2 approaches to calculating the size of the weights as the penalty.** This is akin to the use of both
+penalties used in the **Elastic Net algorithm** for linear and logistic regression. The L2 approach
+is perhaps the most used and is traditionally referred to as weight decay in the field of neural
+networks. It is called shrinkage in statistics, a name that encourages you to think of the impact
+of the penalty on the model weights during the learning process.
+
+.bg-washed-yellow.b--gold.ba.bw2.br3.shadow-5.ph4.mt2[
+This particular choice of regularizer is known in the machine learning literature
+as **weight decay** because in sequential learning algorithms, **it encourages weight values to decay towards zero**, unless supported by the data. In statistics, it provides
+an example of a parameter shrinkage method because it shrinks parameter values
+towards zero
+
+.tr[
+— Page 144-145, Pattern Recognition and Machine Learning, 2006.
+]]
+
+
+---
+
+
