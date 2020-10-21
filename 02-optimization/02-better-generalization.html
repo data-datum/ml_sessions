@@ -35,7 +35,7 @@ class: inverse,  middle
 ### Part 2: Better Generalization
 
 
-fecha: 2020-10-14
+fecha: 2020-10-21
 
 ---
 
@@ -396,6 +396,153 @@ magnitude of the activations may result in more robust and generalized learned f
 
 
 ---
+
+## Problem With Learned Features
+
+* Deep learning models are able to perform **feature learning**. That is, during the training of the network, the model will automatically extract the salient features from the input patterns or **learn features**. 
+* These features may be used in the network in order to predict a quantity for regression or predict a class value for classification. These internal representations are tangible things. The output of a hidden layer within the network represent the learned features by the model at that point in the network. 
+* **The learned features, or encoded inputs, must be large enough to capture the salient features of the input but also focused enough to not overfit the specific examples in the training dataset**. As such, there is a tension between the expressiveness and the generalization of the learned features.
+
+
+
+.bg-washed-yellow.b--gold.ba.bw2.br3.shadow-5.ph4.mt2[
+
+* **In the same way that large weights in the network can signify an unstable and overfit model, large output values in the learned features can signify the same problems.**
+
+]
+
+
+
+---
+
+## Encourage Small Activations
+
+* The loss function of the network can be updated to penalize models in proportion to the
+magnitude of their activation. This is similar to weight regularization where the loss function is updated to penalize the model in proportion to the magnitude of the weights. The output of a layer is referred to as its activation or activity, as such, this form of penalty or regularization is referred to as **activation regularization or activity regularization**.
+
+The output of an encoder or, generally, the output of a hidden layer in a neural network
+may be considered the representation of the problem at that point in the model. As such, this type of penalty may also be referred to as **representation regularization**. **The desire to have small activations or even very few activations with mostly zero values is also called a desire for sparsity**. As such, this type of penalty is also referred to as **sparse feature learning**.
+
+
+.bg-washed-yellow.b--gold.ba.bw2.br3.shadow-5.ph4.mt2[
+
+* **One way to limit the information content of an overcomplete code is to make it sparse.**
+
+
+]
+
+
+---
+
+* Sparsity is most commonly sought when a larger-than-required hidden layer (e.g. over-
+complete) is used to learn features that may encourage overfitting. **The introduction of a sparsity penalty counters this problem and encourages better generalization.** A sparse overcomplete learned feature has been shown to be more effective than other types of learned features offering better robustness to noise and even transforms in the input, e.g. learned features of images may have improved invariance to the position of objects in the image.
+
+* There is a general focus on sparsity of the representations rather than small vector magnitudes. A study of these representations that is more general than the use of neural networks is known as sparse coding.
+
+
+---
+
+## How to Encourage Small Activations
+
+An activation penalty can be applied per-layer, perhaps only at one layer that is the focus of the learned representation, such as the output of the encoder model or the middle (bottleneck) of an autoencoder model. A constraint can be applied that adds a penalty proportional to the magnitude of the vector output of the layer. The activation values may be positive or negative, so we cannot simply sum the values. **Two common methods for calculating the magnitude of the activation are**:
+
+
+
+.bg-washed-yellow.b--gold.ba.bw2.br3.shadow-5.ph4.mt2[
+
+
+* **Sum of the absolute activation values, called L1 vector norm.**
+* **Sum of the squared activation values, called the L2 vector norm.**
+
+]
+
+The **L1 norm encourages sparsity**, e.g. allows some activations to become zero, whereas the **L2 norm encourages small activations values in general**. Use of the L1 norm may be a more commonly used penalty for activation regularization. A hyperparameter must be specified that indicates the amount or degree that the loss function will weight or pay attention to the penalty. Common values are on a logarithmic scale between 0 and 0.1, such as 0.1, 0.001, 0.0001, etc. **Activity regularization can be used in conjunction with other regularization techniques, such as weight regularization.**
+
+---
+
+## Tips for Using Activation Regularization
+
+--
+
+* **.dark-green[Use With All Network Types]**
+
+Activation regularization is a generic approach. It can be used with most, perhaps all, types of neural network models, not least the most common network types of Multilayer Perceptrons, Convolutional Neural Networks, and Long Short-Term Memory Recurrent Neural Networks.
+
+--
+
+* **.dark-green[Use With Autoencoders and Encoder-Decoders]**
+
+Activity regularization may be best suited to those model types that explicitly seek an efficient learned representation. These include models such as autoencoders (i.e. sparse autoencoders) and encoder-decoder models, such as encoder-decoder LSTMs used for sequence-to-sequence prediction problems.
+
+--
+
+* **.dark-green[Experiment With Different Norms]**
+
+The most common activation regularization is the L1 norm as it encourages sparsity. Experiment
+with other types of regularization such as the L2 norm or using both the L1 and L2 norms at
+the same time, e.g. like the Elastic Net linear regression algorithm
+
+---
+
+### Tips for Using Activation Regularization
+
+--
+
+* **.dark-green[Use Rectified Linear Activation]**
+
+The rectified linear activation function, also called relu, is an activation function that is now widely used in the hidden layer of deep neural networks. Unlike classical activation functions such as tanh (hyperbolic tangent function) and sigmoid (logistic function), the relu function allows exact zero values easily. This makes it a good candidate when learning sparse representations, such as with the L1 vector norm activation regularization.
+
+--
+
+
+* **.dark-green[Grid Search Parameters]**
+
+It is common to use small values for the regularization hyperparameter that controls the
+contribution of each activation to the penalty. Perhaps start by testing values on a log scale, such as 0.1, 0.001, and 0.0001.
+
+--
+
+* **.dark-green[Standardize Input Data]**
+
+It is a generally good practice to rescale input variables to have the same scale. When input variables have different scales, the scale of the weights of the network will, in turn, vary accordingly. Large weights can saturate the nonlinear transfer function and reduce the variance in the output from the layer. This may introduce a problem when using activation regularization. This problem can be addressed by either normalizing or standardizing input variables.
+
+---
+
+### Tips for Using Activation Regularization
+
+
+* **.dark-green[Use an Overcomplete Representation]**
+
+Configure the layer chosen to be the learned features, e.g. the output of the encoder or the
+bottleneck in the autoencoder, to have more nodes that may be required. This is called an
+overcomplete representation that will encourage the network to overfit the training examples. This can be countered with a strong activation regularization in order to encourage a rich learned representation that is also sparse.
+
+
+
+---
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo14.jpg)
+background-size: cover
+
+# Force Small Weights with Weight Constraints
+
+
+---
+
+
+## Force Small Weights with Weight Constraints
+
+We will cover these topics:
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+
+* **Weight penalties encourage but do not require neural networks to have small weights.**
+* **Weight constraints, such as the L2 norm and maximum norm, can be used to force neural networks to have small weights during training.**
+* **Weight constraints can improve generalization when used in conjunction with other regularization methods like dropout.**
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
