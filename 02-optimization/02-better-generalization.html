@@ -35,7 +35,7 @@ class: inverse,  middle
 ### Part 2: Better Generalization
 
 
-fecha: 2020-10-21
+fecha: 2020-10-22
 
 ---
 
@@ -543,6 +543,185 @@ We will cover these topics:
 * **Weight constraints, such as the L2 norm and maximum norm, can be used to force neural networks to have small weights during training.**
 * **Weight constraints can improve generalization when used in conjunction with other regularization methods like dropout.**
 ]
+
+
+
+---
+
+## How to Use a Weight Constraint
+
+A constraint is enforced on each node within a layer. All nodes within the layer use the same constraint, and often multiple hidden layers within the same network will use the same constraint. Recall that when we talk about the vector norm in general, that this is the magnitude of the vector of weights in a node, and by default is calculated as the L2 norm, e.g. the square root of the sum of the squared values in the vector. Some examples of constraints that could be used include:
+
+.bg-washed-yellow.b--gold.ba.bw2.br3.shadow-5.ph4.mt2[
+
+* Force the vector norm to be 1.0 (e.g. the unit norm).
+* Limit the maximum size of the vector norm (e.g. the maximum norm).
+* Limit the minimum and maximum size of the vector norm (e.g. the min max norm).
+
+]
+
+---
+
+### How to Use a Weight Constraint
+
+
+* The maximum norm, also called **max-norm or maxnorm**, is a popular constraint because it
+is less aggressive than other norms such as the unit norm, simply setting an upper bound.
+
+* When using a limit or a range, a hyperparameter must be specified. Given that weights are
+small, the hyperparameter too is often a small integer value, such as a value between 1 and 4.
+
+* If the norm exceeds the specified range or limit, the weights are rescaled or normalized such that their magnitude is below the specified parameter or within the specified range.
+
+* T**he constraint can be applied after** each update to the weights, e.g. **at the end of each minibatch**.
+
+---
+
+## Tips for Using Weight Constraints
+
+--
+
+* **.dark-blue[Use With All Network Types]**
+
+--
+
+* **.dark-blue[Standardize Input Data]**
+
+--
+
+* **.dark-blue[Use a Larger Learning Rate]**
+
+The use of a weight constraint allows you to be more aggressive during the training of the
+network. Specifically, a larger learning rate can be used, allowing the network to, in turn, make larger updates to the weights each update. This is cited as an important benefit to using weight constraints. Such as the use of a constraint in conjunction with dropout
+
+--
+
+* **.dark-blue[Try Other Constraints]**
+
+Explore the use of other weight constraints, such as a minimum and maximum range, non-negative weights, and more. You may also choose to use constraints on some weights and not others, such as not using constraints on bias weights in an MLP or not using constraints on recurrent connections in an LSTM.
+
+
+
+---
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo15.jpg)
+background-size: cover
+
+# Decouple Layers with Dropout
+
+---
+
+## Decouple Layers with Dropout
+
+We will cover these topics:
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+
+* **Large weights in a neural network are a sign of a more complex network that has overfit the training data.**
+* **Probabilistically dropping out nodes in the network is a simple and effective regularization method.**
+* **A large network with more training epochs and the use of a weight constraint are suggested when using dropout.**
+]
+
+---
+
+## Randomly Drop Nodes
+
+
+* **Dropout is a regularization method that approximates training a large number of neural networks with different architectures in parallel. During training, some number of node outputs are randomly ignored or dropped out.** This has the effect of making the layer look-like and be treated-like a layer with a different number of nodes and connectivity to the prior layer. In effect, each update to a layer during training is performed with a different view of the configured layer.
+
+* **Dropout has the effect of making the training process noisy, forcing nodes within a layer to probabilistically take on more or less responsibility for the inputs.** This conceptualization suggests that perhaps dropout breaks-up situations where network layers co-adapt to correct mistakes from prior layers, in turn making the model more robust.
+
+* Dropout simulates a sparse activation from a given layer, which interestingly, in turn,
+encourages the network to actually learn a sparse representation as a side-effect. As such, it may be used as an alternative to activity regularization for encouraging sparse representations in autoencoder models.
+
+* Because the outputs of a layer under dropout are randomly subsampled, it has the effect of
+reducing the capacity or thinning the network during training. As such, a wider network, e.g. more nodes, may be required when using dropout.
+
+
+---
+
+## How to Dropout
+
+* Dropout is implemented per-layer in a neural network. It can be used with most types of layers, such as dense fully connected layers, convolutional layers, and recurrent layers such as the long short-term memory network layer. Dropout may be implemented on any or all hidden layers in the network as well as the visible or input layer. It is not used on the output layer.
+
+* Dropout is not used after training when making a prediction with the fit network. The
+weights of the network will be larger than normal because of dropout. Therefore, before finalizing the network, the weights are first scaled by the chosen dropout rate. The network can then be used as per normal to make predictions.
+
+* The rescaling of the weights can be performed at training time instead, after each weight
+update at the end of the minibatch. This is sometimes called inverse dropout and does not
+require any modification of weights during training.
+
+* Dropout works well in practice, perhaps replacing the need for weight regularization (e.g.
+weight decay) and activation regularization (e.g. representation sparsity).
+
+
+---
+
+## Tips for Using Dropout Regularization
+
+* **.dark-blue[Use With All Network Types]**
+
+--
+
+* **.dark-blue[Dropout Rate]**
+
+
+The default interpretation of the dropout hyperparameter is the probability of training a given node in a layer, where 1.0 means no dropout, and 0.0 means no outputs from the layer. A good value for dropout in a hidden layer is between 0.5 and 0.8. Input layers use a larger dropout (retention) rate, such as of 0.8.
+
+--
+
+* **.dark-blue[Use a Larger Network]**
+
+
+It is common for larger networks (more layers or more nodes) to more easily overfit the training data. When using dropout regularization, it is possible to use larger networks with less risk of overfitting. In fact, a large network (more nodes per layer) may be required as dropout will probabilistically reduce the capacity of the network. A good rule of thumb is to divide the number of nodes in the layer before dropout by the proposed dropout rate and use that as the number of nodes in the new network that uses dropout.
+
+
+---
+
+* **.dark-blue[Grid Search Parameters]**
+
+
+Rather than guess at a suitable dropout rate for your network, test different rates systematically.
+For example, test values between 1.0 and 0.1 in increments of 0.1. This will both help you
+discover what works best for your specific model and dataset, as well as how sensitive the model is to the dropout rate. A more sensitive model may be unstable and could benefit from an increase in size.
+
+--
+
+* **.dark-blue[Use a Weight Constraint]**
+
+
+Network weights will increase in size in response to the probabilistic removal of layer activations. Large weight size can be a sign of an unstable network. To counter this effect a weight constraint can be imposed to force the norm (magnitude) of all weights in a layer to be below a specified value. For example, the maximum norm constraint is recommended with a value between 3 and 4.
+
+--
+
+* **.dark-blue[Use With Smaller Datasets]**
+
+Like other regularization methods, dropout is more effective on those problems where there is a limited amount of training data and the model is likely to overfit the training data. Problems where there is a large amount of training data may see less benefit from using dropout.
+
+---
+
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo17.jpg)
+background-size: cover
+
+# Robustness with Noise
+
+
+
+---
+
+
+
+class: animated slideInRight fadeOutLeft, inverse, middle
+
+background-image: url(img/diapo18.jpg)
+background-size: cover
+
+# Early Stopping
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
