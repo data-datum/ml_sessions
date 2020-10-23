@@ -35,7 +35,7 @@ class: inverse,  middle
 ### Part 2: Better Generalization
 
 
-fecha: 2020-10-22
+fecha: 2020-10-23
 
 ---
 
@@ -714,6 +714,125 @@ background-size: cover
 
 ---
 
+## Robustness with Noise
+
+We will cover these topics:
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+* **Small datasets can make learning challenging for neural nets and the examples can be memorized.**
+* **Adding noise during training can make the training process more robust and reduce generalization error.**
+* **Noise is traditionally added to the inputs, but can also be added to weights, gradients, and even activation functions.**
+
+]
+
+
+---
+
+## Challenge of Small Training Datasets
+
+* Small datasets can introduce problems when training large neural networks. **.dark-red[The first problem is that the network may effectively memorize the training dataset.]** Instead of learning a general mapping from inputs to outputs, the model may learn the specific input examples and their associated outputs. This will result in a model that performs well on the training dataset, and poor on new data, such as a holdout dataset. **.dark-red[The second problem is that a small dataset provides less opportunity to describe the structure of the input space and its relationship to the output.]** More training data provides a richer description of the problem from which the model may learn. Fewer data points means that rather than a smooth input space, the points may represent a jarring and disjointed structure that may result in a difficult, if not unlearnable, mapping function. It is not always possible to acquire more data. Further, getting a hold of more data may not address these problems.
+
+---
+
+## Add Random Noise During Training
+
+* At first, this sounds like a recipe for making learning more challenging. It is a counter-
+intuitive suggestion to improving performance because one would expect noise to degrade
+performance of the model during training.
+
+* The addition of noise during the training of a neural network model has a regularization effect and, in turn, improves the robustness of the model. It has been shown to have a similar impact on the loss function as the addition of a penalty term, as in the case of weight regularization methods.
+
+* In effect, adding noise expands the size of the training dataset. Each time a training sample is exposed to the model, random noise is added to the input variables making them different every time it is exposed to the model. In this way, adding noise to input samples is a simple form of data augmentation.
+
+* Adding noise means that the network is less able to memorize training samples because they
+are changing all of the time, resulting in smaller network weights and a more robust network
+that has lower generalization error. The noise means that it is as though new samples are being drawn from the domain in the vicinity of known samples, smoothing the structure of the input space. This smoothing may mean that the mapping function is easier for the network to learn, resulting in better and faster learning.
+
+
+
+---
+
+## How and Where to Add Noise
+
+The most common type of noise used during training is the addition of **Gaussian noise to input variables**. Gaussian noise, or white noise, has a mean of zero and a standard deviation of one and can be generated as needed using a pseudorandom number generator. The addition of Gaussian noise to the inputs to a neural network was traditionally referred to as jitter or random jitter after the use of the term in signal processing to refer to the uncorrelated random noise in electrical circuits. The amount of noise added (e.g. the spread or standard deviation) is a configurable hyperparameter. Too little noise has no effect, whereas too much noise makes the mapping function too challenging to learn.
+
+* The standard deviation of the random noise controls the amount of spread and can be
+adjusted based on the scale of each input variable. It can be easier to configure if the scale of the input variables has first been normalized. Noise is only added during training. No noise is added during the evaluation of the model or when the model is used to make predictions on new data. The addition of noise is also an important part of automatic feature learning, such as in the case of autoencoders, so-called denoising autoencoders that explicitly require models to learn robust features in the presence of noise added to inputs.
+
+
+
+---
+
+Although additional noise to the inputs is the most common and widely studied approach,
+random noise can be added to other parts of the network during training. Some examples
+include:
+
+* **.dark-red[Add noise to activations, i.e. the outputs of each layer.]**
+
+The addition of noise to the layer activations allows noise to be used at any point in the
+network. This can be beneficial for very deep networks. Noise can be added to the layer
+outputs themselves, but this is more likely achieved via the use of a noisy activation function.
+
+--
+
+* **.dark-green[Add noise to weights, i.e. an alternative to the inputs.]**
+
+The addition of noise to weights allows the approach to be used throughout the network in
+a consistent way instead of adding noise to inputs and layer activations. This is particularly useful in recurrent neural networks.
+
+--
+
+* **.dark-blue[Add noise to the gradients, i.e. the direction to update weights.]**
+
+The addition of noise to gradients focuses more on **improving the robustness of the optimization process itself rather than the structure of the input domain**. The amount of noise can start high at the beginning of training and decrease over time, much like a decaying learning rate. This approach has proven to be an effective method for very deep networks and for a variety of different network types.
+
+
+---
+
+* **.dark-violet[Add noise to the outputs, i.e. the labels or target variables.]**
+
+Adding noise to the activations, weights, or gradients all provide a more generic approach to adding noise that is invariant to the types of input variables provided to the model. **If the problem domain is believed or expected to have mislabeled examples, then the addition of noise to the class label can improve the model’s robustness to this type of error.** Although, it can be easy to derail the learning process. Adding noise to a continuous target variable in the case of regression or time series forecasting is much like the addition of noise to the input variables and may be a better use case.
+
+
+---
+
+## Tips for Adding Noise During Training
+
+--
+
+* **.dark-red[Problem Types for Adding Noise]**
+
+Noise can be added to training regardless of the type of problem that is being addressed. It
+is appropriate to try adding noise to both classification and regression type problems. The
+type of noise can be specialized to the types of data used as input to the model, for example, two-dimensional noise in the case of images and signal noise in the case of audio data.
+
+--
+
+* **.dark-red[Add Noise to Different Network Types]**
+
+--
+
+* **.dark-red[Rescale Data First]**
+
+It is important that the addition of noise has a consistent effect on the model. This requires that the input data is rescaled so that all variables have the same scale, so that when noise is added to the inputs with a fixed variance, it has the same effect. The also applies to adding noise to weights and gradients as they too are affected by the scale of the inputs. This can be achieved via standardization or normalization of input variables. If random noise is added after data scaling, then the variables may need to be rescaled again, perhaps per minibatch.
+
+---
+
+* **.dark-red[Test the Amount of Noise]**
+
+You cannot know how much noise will benefit your specific model on your training dataset.
+Experiment with different amounts, and even different types of noise, in order to discover what works best. Be systematic and use controlled experiments, perhaps on smaller datasets across a range of values.
+
+--
+
+
+* **.dark-red[Test the Amount of Noise]**
+
+Noise is only added during the training of your model. Be sure that any source of noise is not added during the evaluation of your model, or when your model is used to make predictions on new data.
+
+
+
+---
 
 
 class: animated slideInRight fadeOutLeft, inverse, middle
@@ -721,7 +840,42 @@ class: animated slideInRight fadeOutLeft, inverse, middle
 background-image: url(img/diapo18.jpg)
 background-size: cover
 
-# Early Stopping
+# Early Stopping`
+
+
+---
+
+
+## Halt Training at the Right Time with Early Stopping
+
+
+We will cover these topics:
+
+.bg-lightest-blue.b--dark-blue.ba.bw2.br3.shadow-5.ph4.mt2[
+
+* **The challenge of training a neural network long enough to learn the mapping, but not so long that it overfits the training data.**
+* **Model performance on a holdout validation dataset can be monitored during training and training stopped when generalization error starts to increase.**
+* **The use of early stopping requires the selection of a performance measure to monitor, a trigger to stop training, and a selection of the model weights to use.**
+
+]
+
+---
+
+## The Problem of Training Just Enough
+
+* When training a large network, there will be a point during training when the model will stop generalizing and start learning the statistical noise in the training dataset. This overfitting of the training dataset will result in an increase in generalization error, making the model less useful at making predictions on new data. The challenge is to train the network long enough that it is capable of learning the mapping from inputs to outputs, but not training the model so long that it overfits the training data.
+
+* One approach to solving this problem is to treat the number of training epochs as a
+hyperparameter and train the model multiple times with different values, then select the number of epochs that result in the best performance on the train or a holdout test dataset. The downside of this approach is that it requires multiple models to be trained and discarded. This can be computationally inefficient and time-consuming, especially for large models trained on large datasets over days or weeks.
+
+
+---
+
+## Stop Training When Generalization Error Increases
+
+* An alternative approach is to train the model once for a large number of training epochs.
+During training, the model is evaluated on a holdout validation dataset after each epoch. If
+the performance of the model on the validation dataset starts to degrade (e.g. loss begins to increase or accuracy begins to decrease), then the training process is stopped.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
