@@ -887,3 +887,13 @@ hyperparameter and train the model multiple times with different values, then se
 During training, the model is evaluated on a holdout validation dataset after each epoch. If
 the performance of the model on the validation dataset starts to degrade (e.g. loss begins to increase or accuracy begins to decrease), then the training process is stopped.
 
+* The model at the time that training is stopped is then used and is known to have good
+generalization performance. This procedure is called early stopping and is perhaps one of the oldest and most widely used forms of neural network regularization.
+
+* If regularization methods like weight decay that update the loss function to encourage less complex models are considered explicit regularization, then early stopping may be thought of as a type of implicit regularization, much like using a smaller network that has less capacity.
+
+
+---
+
+## How to Stop Training Early
+
